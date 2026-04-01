@@ -1,5 +1,8 @@
 # Proyecto 1 — Algoritmos iterativos
-#### Andres Barbosa, Milton Hernández, Iván Gallardo.
+
+**Universidad de Magallanes - Diseño de Algoritmos - 2026**
+**Estudiantes:** [Andres Barbosa](mailto:abarbosa@umag.cl), [Milton Hernández](mailto:mhern@umag.cl), [Iván Gallardo](mailto:ivangall@umag.cl).
+**Docente:** [Jacqueline Aldridge ](mailto:jacqueline.aldridge@umag.cl)
 
 El presente repositorio tiene como objetivo la comparación y comprobación de los órdenes de complejidad de distintos algoritmos de ordenamiento y búsqueda, mediante su implementación y evaluación sobre datos artificialmente generados de deportistas.
 
@@ -11,7 +14,13 @@ En esta primera etapa, el repositorio está orientado a la construcción de la b
 
 Desarrollar un sistema que permita generar, almacenar, ordenar y buscar información de deportistas, con el fin de analizar empíricamente y contrastar teóricamente el rendimiento de distintos algoritmos clásicos de ordenamiento y búsqueda.
 
+> [!NOTE] Nota
+> Este README corresponde a una versión inicial del proyecto. La documentación será ampliada conforme se implementen las funcionalidades y algoritmos requeridos.
 
-## Nota
+## Manejo de errores
 
-Este README corresponde a una versión inicial del proyecto. La documentación será ampliada conforme se implementen las funcionalidades y algoritmos requeridos.
+Dentro del archivo [errors.c](src/errors.c) se encuentra la función `print_error` que se encarga de manejar los errores que puedan ocurrir en el programa. Los códigos de error que se manejan son los siguientes:
+
+| Código de error | Descripción                           |
+| --------------- | ------------------------------------- |
+| 100             | No se pudo leer el archivo \<target\> |
