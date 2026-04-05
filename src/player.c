@@ -5,7 +5,6 @@
  */
 
 #include "player.h"
-#include <string.h>
 
 /**
  * @brief Compara dos jugadores basándose en su ID.
@@ -124,4 +123,47 @@ int compare_competitions(const Player *p1, const Player *p2)
     
     // Si tienen la misma cantidad de competiciones
     return 0;
+}
+
+
+/**
+ * @brief Imprime un arreglo de jugadores en consola.
+ * 
+ * @param players Arreglo de jugadores a imprimir.
+ * @param n Tamanio del arreglo.
+ */
+void print_player_array(Player *players, int n) {
+    // Se imprimen cabeceras
+    printf(
+		DARK_GRAY "|" RESET " "
+		LIGHT_GRAY "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_YELLOW "%10s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_BLUE "%7s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GREEN "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET "\n",
+		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+	);
+
+    // Se imprimen los datos
+    for (int i = 0; i < n; i++) {
+        printf(
+			DARK_GRAY "|" RESET " "
+			WHITE "%4d" RESET " "
+			DARK_GRAY "|" RESET " "
+			YELLOW "%10s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_BLUE "%7s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_GREEN "%5.1f" RESET " "
+			DARK_GRAY "|" RESET " "
+			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET "\n",
+			players[i].id, players[i].name, players[i].team, players[i].score, players[i].competitions
+		);
+    }
 }

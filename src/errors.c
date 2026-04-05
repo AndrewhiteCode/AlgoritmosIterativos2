@@ -32,11 +32,14 @@ void print_error(int num, char *target, char *obs)
     case 100:
         printf("No se pudo leer el archivo %s\n", target);
         break;
+    case 101:
+        printf("No se pudo abrir el archivo %s\n", target);
+        break;
     // Errores Fatales
     // Warnings
     // Default
     default:
-        printf("Codigo de error desconocido\n");
+        printf("Codigo de error %d desconocido\n", num);
     }
     if (obs != NULL)
     {

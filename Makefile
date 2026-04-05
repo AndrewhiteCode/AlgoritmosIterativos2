@@ -25,7 +25,7 @@ clean:
 	rm -rf build/*
 
 folders:
-	mkdir -p src obj incs build build/db docs 
+	mkdir -p src obj incs build/db docs 
 
 run:
 	@./build/$(EXEC) --help

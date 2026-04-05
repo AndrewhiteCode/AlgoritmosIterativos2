@@ -21,6 +21,7 @@ Desarrollar un sistema que permita generar, almacenar, ordenar y buscar informac
 
 Dentro del archivo [errors.c](src/errors.c) se encuentra la función `print_error` que se encarga de manejar los errores que puedan ocurrir en el programa. Los códigos de error que se manejan son los siguientes:
 
-| Código de error | Descripción                           |
-| --------------- | ------------------------------------- |
-| 100             | No se pudo leer el archivo \<target\> |
+| Código de error | Descripción                            |
+| --------------- | ---------------------------------------|
+| 100             | No se pudo leer el archivo \<target\>  |
+| 101             | No se pudo abrir el archivo \<target\> |

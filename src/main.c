@@ -3,104 +3,6 @@
  * @author Andres Barbosa, Milton Hernández, Iván Gallardo
  * @brief Punto de inicio del programa y pruebas de ordenamiento, generacion y busqueda.
  */
-
- /* main.c de Andres
-#include <stdio.h>
-#include <stdlib.h>
-#include "errors.h"
-#include "player.h"
-*/
-
-/**
- * @brief Evalúa el resultado de una comparación e imprime el veredicto en pantalla.
- * * Esta función toma el valor de retorno de las funciones de comparación (-1, 0, 1)
- * y muestra un mensaje formateado en la consola indicando la relación entre los 
- * dos elementos evaluados. También valida que los punteros de nombre no sean nulos.
- *
- * @param result Resultado numérico de la función de comparación previa.
- * @param nameOne Nombre del primer jugador evaluado.
- * @param nameTwo Nombre del segundo jugador evaluado.
- * @param field Etiqueta descriptiva del campo que se está comparando (ej. "ID", "Name").
- */
-
-/*
-void evaluate_and_show(int result, const char* nameOne, const char* nameTwo, const char* field)
-{
-	if (nameOne == NULL || nameTwo == NULL) {
-		// Usamos la función de manejo de errores definida en tu errors.h
-		print_error(100, "Puntero nulo detectado", NULL);
-		return; 
-	}
-
-	if (result == -1) {
-		printf("[%s] The value of %s is LESS than %s\n", field, nameOne, nameTwo);
-		return;
-	} 
-	
-	if (result == 1) {
-		printf("[%s] The value of %s is GREATER than %s\n", field, nameOne, nameTwo);
-		return;
-	} 
-	
-	printf("[%s] The value of %s is EQUAL to %s\n", field, nameOne, nameTwo);
-}    
-	*/
-
-/**
- * @brief Función principal del programa.
- * * Crea un conjunto de jugadores de prueba estáticos y ejecuta una serie de 
- * comparaciones directas (por ID, nombre, equipo, puntuación y competiciones)
- * para validar la correcta implementación de las funciones del archivo player.c.
- * Posteriormente simula un escenario de error abriendo un archivo inexistente.
- *
- * @return 0 si la ejecución finaliza correctamente, 1 si ocurre algún error.
- */
-
-/*
-int main()
-{
-	// Variables no iteradoras declaradas por separado (camelCase)
-	Player playerOne = {1, "Juan", "Lions", 8.5, 50};
-	Player playerTwo = {2, "Ana", "Tigers", 9.2, 30};
-	Player playerThree = {3, "Carlos", "Eagles", 8.5, 75};
-	Player playerFour = {4, "Juan", "Pumas", 7.0, 50};
-	Player playerFive = {5, "Beto", "Lions", 10.0, 99};
-
-	printf("=== DIRECT COMPARISON TESTS ===\n\n");
-
-	printf("--- ID Tests ---\n");
-	evaluate_and_show(compare_id(&playerOne, &playerTwo), playerOne.name, playerTwo.name, "ID");
-	
-	printf("\n--- Name Tests ---\n");
-	evaluate_and_show(compare_name(&playerOne, &playerTwo), playerOne.name, playerTwo.name, "Name");
-	evaluate_and_show(compare_name(&playerOne, &playerFour), playerOne.name, playerFour.name, "Name");
-
-	printf("\n--- Team Tests ---\n");
-	evaluate_and_show(compare_team(&playerTwo, &playerThree), playerTwo.name, playerThree.name, "Team");
-	evaluate_and_show(compare_team(&playerOne, &playerFive), playerOne.name, playerFive.name, "Team");
-
-	printf("\n--- Score Tests ---\n");
-	evaluate_and_show(compare_score(&playerTwo, &playerFive), playerTwo.name, playerFive.name, "Score");
-	evaluate_and_show(compare_score(&playerOne, &playerThree), playerOne.name, playerThree.name, "Score");
-
-	printf("\n--- Competitions Tests ---\n");
-	evaluate_and_show(compare_competitions(&playerThree, &playerFive), playerThree.name, playerFive.name, "Competitions");
-	evaluate_and_show(compare_competitions(&playerOne, &playerFour), playerOne.name, playerFour.name, "Competitions");
-
-	printf("\n=== ORIGINAL MAIN CODE EXECUTION ===\n");
-
-	// Apertura de un archivo inexistente para mostrar el error (De tu plantilla original)
-	FILE *fp = fopen("inexistente.txt", "r");
-	if (fp == NULL) {
-		print_error(100, "inexistente.txt", NULL);
-		return 1;
-	}
-
-	return 0;
-}
-	*/
-
-// main.c de Ivan
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -110,7 +12,9 @@ int main()
 #include "searching.h"
 #include "utilities.h"
 
-#define DEBUG 20
+#define DEBUG 20 // Tamanio del arreglo de prueba
+
+void print_array(int *V, int n);
 
 int main() {
 
@@ -119,16 +23,12 @@ int main() {
 	int check;
 
 	// Arreglos
-	int best[]  = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-	int worst[] = {20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
-	int shuffled[] = {7,5,1,9,3,8,4,2,6,10,20,18,12,14,16,11,19,17,15,13};
-	int V[DEBUG];
+	int V[DEBUG] = {7,5,1,9,3,8,4,2,6,10,20,18,12,14,16,11,19,17,15,13};
 
 	// Variables para la generación de datos (Opcion 1)
 	int n; 
 
 	// Variables para ordenamiento (Opcion 2)
-	int array_option;
 	int sort_option;
 
 	// Variables para busqueda (Opcion 3)
@@ -153,42 +53,15 @@ int main() {
 			check = scanf("%d", &option);
 		}
 
-		if (option == 1) {
+		if (option == 1) { // Opcion 1: Generar CSV
 			printf(DARK_YELLOW "\nType the number of players to generate: " YELLOW);
 			scanf("%d", &n);
 			generate_csv(n);
 		}
 
-		else if (option == 2) {
-			printf(DARK_BLUE "\nChoose an array:\n" LIGHT_BLUE);
-			printf("1) Best case\n");
-			printf("2) Worst case\n");
-			printf("3) Shuffled case\n");
-			printf(DARK_BLUE "Option: " LIGHT_BLUE);
-			scanf("%d", &array_option);
-
-			if (array_option == 1) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = best[i];
-				}
-			} else if (array_option == 2) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = worst[i];
-				}
-			} else if (array_option == 3) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = shuffled[i];
-				}
-			} else {
-				printf("Invalid array option.\n");
-				continue;
-			}
-
+		else if (option == 2) { // Opcion 2: Ordenar arreglo
 			printf(LIGHT_BLUE "\nOriginal array:\n");
-			for (int i = 0; i < DEBUG; i++) {
-				printf("%d ", V[i]);
-			}
-			printf("\n");
+			print_array(V, DEBUG);
 
 			printf(DARK_BLUE "\nChoose a sorting algorithm:\n" LIGHT_BLUE);
 			printf("1) Swap Sort\n");
@@ -212,42 +85,12 @@ int main() {
 			}
 
 			printf(LIGHT_BLUE "\nSorted array:\n");
-			for (int i = 0; i < DEBUG; i++) {
-				printf("%d ", V[i]);
-			}
-			printf("\n");
+			print_array(V, DEBUG);
 		}
 
-		else if (option == 3) {
-			printf(DARK_GREEN "\nChoose an array:\n" LIGHT_GREEN);
-			printf("1) Normal Array\n");
-			printf("2) Inverse Array\n");
-			printf("3) Shuffled Array\n");
-			printf(DARK_GREEN "Option: " LIGHT_GREEN);
-			scanf("%d", &array_option);
-
-			if (array_option == 1) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = best[i];
-				}
-			} else if (array_option == 2) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = worst[i];
-				}
-			} else if (array_option == 3) {
-				for (int i = 0; i < DEBUG; i++) {
-					V[i] = shuffled[i];
-				}
-			} else {
-				printf("Invalid array option.\n");
-				continue;
-			}
-
+		else if (option == 3) { // Opcion 3: Buscar valor
 			printf(LIGHT_GREEN"\nCurrent array:\n");
-			for (int i = 0; i < DEBUG; i++) {
-				printf("%d ", V[i]);
-			}
-			printf("\n");
+			print_array(V, DEBUG);
 
 			printf(DARK_GREEN"\nChoose a searching algorithm:\n"LIGHT_GREEN);
 			printf("1) Linear Search\n");
@@ -269,20 +112,17 @@ int main() {
 			}
 
 			else if (search_option == 2) {
-				insertion_sort(V, DEBUG);
+				insertion_sort(V, DEBUG); // Ordenamos con el arreglo previo a la búsqueda
 
 				printf(LIGHT_GREEN "\nOrdered array used for binary search:\n");
-				for (int i = 0; i < DEBUG; i++) {
-					printf("%d ", V[i]);
-				}
-				printf("\n");
+				print_array(V, DEBUG);
 
 				result = binary_search(V, 0, DEBUG - 1, x);
 
 				if (result == -1) {
 					printf(RESET BG_RED "Value %d was not found.\n", x);
 				} else {
-					printf(RESET BG_GREEN "Value %d found at index %d.\n", x, result);
+					printf(RESET BG_GREEN "Value %d found at index %d (of the sortered array).\n", x, result);
 				}
 			}
 
@@ -291,7 +131,7 @@ int main() {
 			}
 		}
 
-		else if (option == 4) {
+		else if (option == 4) { // Opcion 4: Salir
 			printf(PURPLE "\nExiting program...\n");
 		}
 
@@ -302,4 +142,14 @@ int main() {
 
 	printf(RESET);
 	return 0;
+}
+
+
+void print_array(int *V, int n) {
+	printf("[ ");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", V[i]);
+	}
+	printf("]\n");
+	printf("\n");
 }

@@ -5,7 +5,6 @@
  */
 
 #include "generator.h"
-#include "utilities.h"
 
 static char *teams[] = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Theta", "Lambda", "Pi", "Tau"};
 
@@ -54,14 +53,17 @@ static void generate_player(int id, Player *player)
  * @brief Funcion general de generacion de csv con datos aleatorios 
  * 
  * @param n cantidad de jugadores a generar
+ * 
+ * @return int 0 si todo va bien, otro codigo de error en caso de error
  */
-void generate_csv(int n) 
+int generate_csv(int n) 
 {
 	Player player;
-	FILE *csv = fopen("db/players.csv", "w");
+	FILE *csv = fopen("build/db/players.csv", "w");
 
 	if (csv == NULL) {
-		printf("Error: no se pudo crear el archivo CSV.\n");
+		print_error(101, "build/db/players.csv", NULL);
+		return 101;
 	}
 
 	fprintf(csv, "ID,NAME,TEAM,SCORE,COMPETITIONS,POTATOE\n");
@@ -103,7 +105,7 @@ void generate_csv(int n)
 		}
 
 	fclose(csv);
-	printf(BG_GREEN"\nData generated and saved to players.csv\n");
+	printf(BG_GREEN"\nData generated and saved to players.csv"RESET"\n");
 }
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎
