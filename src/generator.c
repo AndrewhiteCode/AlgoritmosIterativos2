@@ -100,10 +100,10 @@ int generate_csv(int n)
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
-	fprintf(csv, "ID,NAME,TEAM,SCORE,COMPETITIONS,POTATOE\n");
+	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS POTATOE\n");
 	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
-		fprintf(csv, "%d,%s,%s,%.1f,%d,%s\n",
+		fprintf(csv, "%d %s %s %.1f %d %s\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
@@ -146,7 +146,6 @@ Player* load_players(char* file, int* out_n)
     }
 
     int n;
-    char line[256];
     Player* playerArray = NULL;
 
     // Leer cantidad de jugadores
@@ -170,16 +169,8 @@ Player* load_players(char* file, int* out_n)
 
     printf("%s de memoria reservados\n", size_string);
 
-    // Consumir fin de línea tras el número
-    if (fgets(line, sizeof(line), csv) == NULL) {
-        free(playerArray);
-        fclose(csv);
-        print_error(101, file, NULL);
-        return NULL;
-    }
-
     // Leer cabecera
-    if (fgets(line, sizeof(line), csv) == NULL) {
+    if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {
         free(playerArray);
         fclose(csv);
         print_error(101, file, "No se pudo leer la cabecera");
@@ -191,16 +182,8 @@ Player* load_players(char* file, int* out_n)
         // Este campo no parece ser muy relevante, no lo tome en cuenta agente.
         char mysteriousStr[8];
 
-        // Cargamos una linea del archivo csv
-        if (fgets(line, sizeof(line), csv) == NULL) {
-            free(playerArray);
-            fclose(csv);
-            print_error(101, file, "El archivo tiene menos filas de las esperadas");
-            return NULL;
-        }
-
         // Leemos los datos de la linea (el ultimo campo lo leemos y guardamos en mysteriousStr)
-        int fields = sscanf(line, "%d,%10[^,],%10[^,],%f,%d,%7s",
+        int fields = fscanf(csv, "%d %10s %10s %f %d %7s",
             &playerArray[i].id,
             playerArray[i].name,
             playerArray[i].team,

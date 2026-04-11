@@ -29,9 +29,20 @@
 #define LIGHT_GREEN "\x1b[38;5;157m"
 #define DARK_GREEN "\x1b[38;5;34m"
 #define MAGENTA "\x1b[38;5;183m"
-#define PURPLE "\x1b[38;5;5m"
-#define LIGHT_RED "\x1b[31m"
+#define PURPLE "\x1b[38;5;92m"
+#define LIGHT_RED "\x1b[38;5;210m"
+#define DARK_RED "\x1b[38;5;160m"
+
 #define BG_RED "\x1b[41m"
 #define BG_GREEN "\x1b[42m"
+
+// Experimental colors
+
+#define MAG1 "\x1b[38;5;170m"
+#define MAG2 "\x1b[38;5;207m"
+#define MAG3 "\x1b[38;5;213m"
+#define MAG4 "\x1b[38;5;219m"
+#define MAG5 "\x1b[38;5;177m"
+#define MAG6 "\x1b[38;5;171m"
 
 #endif

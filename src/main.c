@@ -34,11 +34,11 @@ int main() {
 	srand(time(0));
 
 	printf(RESET "\n===== MAIN MENU =====\n");
-	printf(DARK_YELLOW "1)" YELLOW "Generate CSV\n");
-	printf(DARK_BLUE "2)" LIGHT_BLUE "Sort array\n");
-	printf(DARK_GREEN "3)" LIGHT_GREEN "Search value\n");
-	printf("4) Run experiment\n");
-	printf(PURPLE "5)" MAGENTA "Exit\n");
+	printf(DARK_YELLOW "1)" YELLOW " Generate CSV\n");
+	printf(DARK_BLUE "2)" LIGHT_BLUE " Sort array\n");
+	printf(DARK_GREEN "3)" LIGHT_GREEN " Search value\n");
+	printf(PURPLE "4)" MAGENTA " Run experiment\n");
+	printf(DARK_RED "5)" LIGHT_RED " Exit\n");
 	printf(DARK_GRAY"Choose an option: " RESET);
 	
 	check =	scanf("%d", &option);
@@ -199,7 +199,7 @@ int main() {
 	}
 
 	else if (option == 5) { // Opcion 5: Salir
-		printf(PURPLE "\nExiting program...\n" RESET);
+		printf(DARK_RED "\nExiting program...\n" RESET);
 	}
 
 	return 0;

@@ -5,12 +5,13 @@
  */
 
 #include "generate_exec_times.h"
+#include "utilities.h"
 
 /**
  * @brief Ejecuta un experimento de ordenamiento y busqueda generando un CSV con los resultados
  * 
  */
-void run_experiment(void)
+void run_experiment()
 {
     int n = 0; // Cantidad de jugadores
     Player* players;
@@ -44,15 +45,17 @@ void run_experiment(void)
     }
 
     // Abrimos el archivo de resultados
-    FILE *csv = fopen("build/db/comparar_Algoritmos.csv", "w");
+    FILE *csv = fopen("build/db/experiment.csv", "w");
     if (csv == NULL)
     {
-        print_error(101, "build/db/comparar_Algoritmos.csv", NULL);
+        print_error(101, "build/db/experiment.csv", NULL);
         return;
     }
 
     fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Linear Search,Binary Search\n");
 
+    // header
+    printf(PURPLE "╔══════════════════════════════════════════╗\n");
 
     for (int s = 0; s < num_points; s++) {
         // k crece desde 1 hasta n, repartido en NUM_STEPS puntos.
@@ -60,21 +63,31 @@ void run_experiment(void)
         int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
         Player target = {k-1, "", "", 0.0, 0, false}; // Jugador buscado de ejemplo
-        printf("Procesando n = %d\n", k);
+
+        //check = system("clear");
+        //if (check != 0) {
+        //    print_error(302, NULL, NULL);
+        //    return;
+        //}
+
+        
+        printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
+        printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
+        //printf(PURPLE "║                                          ║\n");
         clock_t start, end;
 
         // Tiempos Bubble Sort
         double timeSwapSort = 0;
         for (int i = 0; i < NUM_TRIALS; i++) {
-            memcpy(swapSortPlayers, players, k * sizeof(Player)); //TODO: Comprobar que se hizo bien
+            memcpy(swapSortPlayers, players, k * sizeof(Player));
             start = clock();
             swap_sort(swapSortPlayers, k, compare_id);
             end = clock();
             timeSwapSort += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeSwapSort /= NUM_TRIALS;
-        printf("\tSwap Sort: %f\n", timeSwapSort);
-
+        printf(PURPLE "║" MAG1 "\tSwap Sort:" WHITE " %f\t" PURPLE "           ║\n", timeSwapSort);
+ 
 
         // Tiempos Insertion Sort
         double timeInsertionSort = 0;
@@ -86,7 +99,7 @@ void run_experiment(void)
             timeInsertionSort += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeInsertionSort /= NUM_TRIALS;
-        printf("\tInsertion Sort: %f\n", timeInsertionSort);
+        printf(PURPLE "║" MAG2 "\tInsertion Sort:" WHITE " %f\t" PURPLE "   ║\n", timeInsertionSort);
         
         // Tiempos Selection Sort
         double timeSelectionSort = 0;
@@ -98,7 +111,7 @@ void run_experiment(void)
             timeSelectionSort += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeSelectionSort /= NUM_TRIALS;
-        printf("\tSelection Sort: %f\n", timeSelectionSort);
+        printf(PURPLE "║" MAG3 "\tSelection Sort:" WHITE " %f\t" PURPLE "   ║\n", timeSelectionSort);
 
         // Tiempos Cocktail Shaker Sort
         double timeCocktailSort = 0;
@@ -110,7 +123,7 @@ void run_experiment(void)
             timeCocktailSort += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeCocktailSort /= NUM_TRIALS;
-        printf("\tCocktail Shaker Sort: %f\n", timeCocktailSort);
+        printf(PURPLE "║" MAG4 "\tCocktail Shaker Sort:" WHITE " %f" PURPLE "     ║\n", timeCocktailSort);
 
         // Tiempos Linear Search
         double timeLinearSearch = 0;
@@ -122,7 +135,7 @@ void run_experiment(void)
             timeLinearSearch += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeLinearSearch /= NUM_TRIALS;
-        printf("\tLinear Search: %f\n", timeLinearSearch);
+        printf( PURPLE "║" MAG5 "\tLinear Search:" WHITE " %f" PURPLE "            ║\n", timeLinearSearch);
 
         // Tiempos Binary Search
         // USAMOS UN ARREGLO DE LOS YA ORDENADOS COMO INPUT
@@ -135,7 +148,7 @@ void run_experiment(void)
             timeBinarySearch += (double)(end - start) / CLOCKS_PER_SEC;
         }
         timeBinarySearch /= NUM_TRIALS;
-        printf("\tBinary Search: %f\n", timeBinarySearch);
+        printf( PURPLE "║" MAG6 "\tBinary Search:" WHITE " %f" PURPLE "            ║\n", timeBinarySearch);
 
         resultados[struct_idx].n = k;
         resultados[struct_idx].timeSwapSort = timeSwapSort;
@@ -155,13 +168,16 @@ void run_experiment(void)
                 resultados[struct_idx].timeCocktailSort,
                 resultados[struct_idx].timeLinearSearch,
                 resultados[struct_idx].timeBinarySearch
-            );
-        printf("\tEscrita informacion en CSV\n");
+            );        
+        printf(PURPLE "╠══════════════════════════════════════════╣\n");
         struct_idx++;
     }
+    // end of table
+    printf(PURPLE "║" LIGHT_GREEN "              CSV Data written" PURPLE "            ║\n");
+    printf(PURPLE "╚══════════════════════════════════════════╝\n" RESET);
     fclose(csv);
 
-    printf("\nDatos guardados en build/db/comparar_Algoritmos.csv\n");
+    printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
     free(players);
     free(swapSortPlayers);
