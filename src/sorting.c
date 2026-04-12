@@ -31,8 +31,8 @@ void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 
 		for (int j = 0; j <= n - 1 - i; j++) {
 			if (comp_f(&V[j], &V[j + 1]) > 0) {
-                swap(&V[j], &V[j + 1]);
-                swapped = 1;
+				swap(&V[j], &V[j + 1]);
+				swapped = 1;
 			}
 		}
 
@@ -54,8 +54,8 @@ void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 		int j = i - 1;
 
 		while ((j >= 0) && (comp_f(&V[j], &k) > 0)) {
-            V[j + 1] = V[j];
-            j--;
+			V[j + 1] = V[j];
+			j--;
 		}
 
 		V[j + 1] = k;
@@ -69,18 +69,21 @@ void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
  * @param n tamanho del arreglo
  */
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
-    for (int i = 1; i <= n - 1; i++) {
-        int k = i - 1;
-        for (int j = i; j <= n - 1; j++) {
-            if (comp_f(&V[j], &V[k]) < 0) {
-                k = j;
-            }
-        }
-        if (k != i - 1) {
-            swap(&V[k], &V[i - 1]);
-        }
-    }
+	for (int i = 1; i <= n - 1; i++) {
+		int k = i - 1;
+		for (int j = i; j <= n - 1; j++) {
+			if (comp_f(&V[j], &V[k]) < 0) {
+				k = j;
+			}
+		}
+		if (k != i - 1) {
+			swap(&V[k], &V[i - 1]);
+		}
+	}
 }
+
+// !PUNTO COMERCIAL!. De vez en cuando, este 
+// generate_exec_times.c
 
 /**
  * @brief Ordenamiento por shaker
@@ -89,26 +92,26 @@ void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
  * @param n tamanho del arreglo
  */
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
-    int beg = 0;
-    int end = n - 1;
-    int swapped;
+	int beg = 0;
+	int end = n - 1;
+	int swapped;
 
-    while (beg < end) {
-        swapped = 0;
-        for (int i = beg; i <= end - 1; i++) {
-            if (comp_f(&V[i], &V[i + 1]) > 0) {
-                swap(&V[i], &V[i + 1]);
-                swapped = 1;
-            }
-        }
-        for (int i = end - 1; i >= beg + 1; i--) {
-            if (comp_f(&V[i], &V[i - 1]) < 0) {
-                swap(&V[i], &V[i - 1]);
-                swapped = 1;
-            }
-        }
-        if (swapped == 0) break;
-        beg++;
-        end--;
-    }
+	while (beg < end) {
+		swapped = 0;
+		for (int i = beg; i <= end - 1; i++) {
+			if (comp_f(&V[i], &V[i + 1]) > 0) {
+				swap(&V[i], &V[i + 1]);
+				swapped = 1;
+			}
+		}
+		for (int i = end - 1; i >= beg + 1; i--) {
+			if (comp_f(&V[i], &V[i - 1]) < 0) {
+				swap(&V[i], &V[i - 1]);
+				swapped = 1;
+			}
+		}
+		if (swapped == 0) break;
+		beg++;
+		end--;
+	}
 }

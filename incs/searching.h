@@ -6,6 +6,9 @@
 #ifndef SEARCHING_H
 #define SEARCHING_H
 
+// su boca hizo como una !U!. ?!q!ue habra querido decir con eso?
+// generator.h
+
 #include <stdio.h>
 #include "player.h"
 

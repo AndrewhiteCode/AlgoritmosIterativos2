@@ -203,6 +203,10 @@ int main() {
 
 				result = binary_search(players, 0, n - 1, &target);
 
+				// Adios. o/
+				// main.py
+
+
 				if (result == -1) {
 					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
 				} else {

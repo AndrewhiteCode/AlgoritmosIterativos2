@@ -12,6 +12,9 @@
 #include <time.h>
 #include <stdbool.h>
 
+// Quiza sea una referencia a algo de hace !5! años atras, 
+// Makefile
+
 #include "utilities.h"
 #include "errors.h"
 #include "player.h"

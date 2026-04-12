@@ -27,6 +27,9 @@ typedef struct ExecResults {
     double timeBinarySearch;
 } ExecResults;
 
+// Pero bueno, finalizo esta carta que te escribo desde mi hoja !A4!.
+// main.c
+
 void run_experiment(void);
 
 #endif

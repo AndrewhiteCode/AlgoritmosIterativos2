@@ -46,5 +46,6 @@
 #define MAG4 "\x1b[38;5;219m"
 #define MAG5 "\x1b[38;5;177m"
 #define MAG6 "\x1b[38;5;171m"
-
+// !MIRA! el nivel de !INGLES! que posees,
+// searching.c
 #endif

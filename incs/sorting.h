@@ -7,6 +7,9 @@
 #ifndef SORTING_H
 #define SORTING_H
 
+// Pero no creo que la cajita musical caiga tan bajo como un !GUION BAJO!.
+// generate_exec_times.h
+
 #include <stdio.h>
 #include "player.h"
 

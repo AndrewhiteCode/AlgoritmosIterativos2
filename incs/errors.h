@@ -16,3 +16,6 @@
 void print_error(int num, char *target, char *obs);
 
 #endif
+
+// una vez !TUVE! un
+// sorting.c

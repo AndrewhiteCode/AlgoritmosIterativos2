@@ -30,14 +30,14 @@ static void shuffle_players(Player players[], int n)
  */
 static void reverse_players(Player players[], int n)
 {
-    int left = 0;
-    int right = n - 1;
+	int left = 0;
+	int right = n - 1;
 
-    while (left < right) {
-        swap_player(&players[left], &players[right]);
-        left++;
-        right--;
-    }
+	while (left < right) {
+		swap_player(&players[left], &players[right]);
+		left++;
+		right--;
+	}
 }
 
 /**
@@ -115,12 +115,12 @@ int generate_csv(int n, int generationType)
 		generate_player(i + 1, &players[i]);
 	}
 
-    if (generationType == 2) {
-        reverse_players(players, n);
-    } else if (generationType == 3) {
-        shuffle_players(players, n);
-    }
-    // El best case son los amigos que hicimos en el camino
+	if (generationType == 2) {
+		reverse_players(players, n);
+	} else if (generationType == 3) {
+		shuffle_players(players, n);
+	}
+	// El best case son los amigos que hicimos en el camino
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
@@ -139,15 +139,15 @@ int generate_csv(int n, int generationType)
 	}
 
 	// Imprimimos los datos por consola
-    //if (n > MAX_CONSOLE_READABLE_PLAYERS) {
-    //    print_error(301, NULL, NULL);
+	//if (n > MAX_CONSOLE_READABLE_PLAYERS) {
+	//    print_error(301, NULL, NULL);
 	//    print_player_array(players, MAX_CONSOLE_READABLE_PLAYERS);
-    //}
-    //else {
-    //    print_player_array(players, n);
-    //}
+	//}
+	//else {
+	//    print_player_array(players, n);
+	//}
 
-    print_player_array_more(players, n);
+	print_player_array_more(players, n);
 
 	free(players);
 	fclose(csv);
@@ -166,76 +166,78 @@ int generate_csv(int n, int generationType)
  */
 Player* load_players(char* file, int* out_n)
 {
-    FILE *csv = fopen(file, "r");
-    if (csv == NULL) {
-        print_error(101, file, NULL);
-        return NULL;
-    }
+	FILE *csv = fopen(file, "r");
+	if (csv == NULL) {
+		print_error(101, file, NULL);
+		return NULL;
+	}
 
-    int n;
-    Player* playerArray = NULL;
+	int n;
+	Player* playerArray = NULL;
 
-    // Leer cantidad de jugadores
-    if (fscanf(csv, "%d", &n) != 1 || n <= 0) {
-        fclose(csv);
-        print_error(103, "No se pudo leer la cantidad de jugadores", NULL);
-        return NULL;
-    }
+	// Leer cantidad de jugadores
+	if (fscanf(csv, "%d", &n) != 1 || n <= 0) {
+		fclose(csv);
+		print_error(103, "No se pudo leer la cantidad de jugadores", NULL);
+		return NULL;
+	}
 
-    // Reservar memoria
-    size_t size = (size_t)n * sizeof(Player);
-    char size_string[32];
-    sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
+	// Reservar memoria
+	size_t size = (size_t)n * sizeof(Player);
+	char size_string[32];
+	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
 
-    playerArray = malloc(size);
-    if (playerArray == NULL) {
-        fclose(csv);
-        print_error(102,  size_string, NULL);
-        return NULL;
-    }
+	playerArray = malloc(size);
+	if (playerArray == NULL) {
+		fclose(csv);
+		print_error(102,  size_string, NULL);
+		return NULL;
+	}
+	// Entonces mi punto comercial sonrio y 
+	// searching.h
 
-    printf("%s de memoria reservados\n", size_string);
+	printf("%s de memoria reservados\n", size_string);
 
-    // Leer cabecera
-    if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {
-        free(playerArray);
-        fclose(csv);
-        print_error(101, file, "No se pudo leer la cabecera");
-        return NULL;
-    }
+	// Leer cabecera
+	if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {
+		free(playerArray);
+		fclose(csv);
+		print_error(101, file, "No se pudo leer la cabecera");
+		return NULL;
+	}
 
-    // Leer jugadores
-    for (int i = 0; i < n; i++) {
-        // Este campo no parece ser muy relevante, no lo tome en cuenta agente.
-        char mysteriousStr[8];
+	// Leer jugadores
+	for (int i = 0; i < n; i++) {
+		// Este campo no parece ser muy relevante, no lo tome en cuenta agente.
+		char mysteriousStr[8];
 
-        // Leemos los datos de la linea (el ultimo campo lo leemos y guardamos en mysteriousStr)
-        int fields = fscanf(csv, "%d %10s %10s %f %d %7s",
-            &playerArray[i].id,
-            playerArray[i].name,
-            playerArray[i].team,
-            &playerArray[i].score,
-            &playerArray[i].competitions,
-            mysteriousStr
-        );
-    
-        if (fields != 6) {
-            free(playerArray);
-            fclose(csv);
-            print_error(101, file, "CSV malformada");
-            return NULL;
-        }
+		// Leemos los datos de la linea (el ultimo campo lo leemos y guardamos en mysteriousStr)
+		int fields = fscanf(csv, "%d %10s %10s %f %d %7s",
+			&playerArray[i].id,
+			playerArray[i].name,
+			playerArray[i].team,
+			&playerArray[i].score,
+			&playerArray[i].competitions,
+			mysteriousStr
+		);
+	
+		if (fields != 6) {
+			free(playerArray);
+			fclose(csv);
+			print_error(101, file, "CSV malformada");
+			return NULL;
+		}
 
-        // Convertimos la cadena en mysteriousStr a booleano
-        playerArray[i].potatoe = (strcmp(mysteriousStr, "true") == 0);
-    }
+		// Convertimos la cadena en mysteriousStr a booleano
+		playerArray[i].potatoe = (strcmp(mysteriousStr, "true") == 0);
+	}
 
-    // Enviamos la cantidad de jugadores si el puntero fue pasado
-    if (out_n != NULL) {
-        *out_n = n;
-    }
-    fclose(csv);
-    return playerArray;
+	// Enviamos la cantidad de jugadores si el puntero fue pasado
+	if (out_n != NULL) {
+		*out_n = n;
+	}
+	fclose(csv);
+	return playerArray;
 }
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

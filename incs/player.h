@@ -43,6 +43,8 @@ int compare_name(Player *p1, Player *p2);
 int compare_team(Player *p1, Player *p2);
 int compare_score(Player *p1, Player *p2);
 int compare_competitions(Player *p1, Player *p2);
+// creo que !G!uardare esa pregunta en una cajita musical 
+// errors.c
 void print_player_array(Player *players, int n);
 void print_player_array_more(Player *players, int n);
 void print_player(Player *player);
