@@ -67,9 +67,9 @@ int main() {
 		printf(BROWN "   ╔════════════════════════╗\n");
 		printf(BROWN "   ║" YELLOW "  Choose the case type  " BROWN "║" "\n");
 		printf(BROWN "╔══╩════════════════════════╩══╗\n");
-		printf(BROWN "║" DARK_YELLOW " 1)" YELLOW " Sorted Array" BROWN "                 ║\n");
-		printf(BROWN "║" DARK_YELLOW " 2)" YELLOW " Inverse Array" BROWN "                ║\n");
-		printf(BROWN "║" DARK_YELLOW " 3)" YELLOW " Shuffled Array" BROWN "               ║\n");
+		printf(BROWN "║" DARK_YELLOW " 1)" YELLOW " Sorted Array" BROWN "              ║\n");
+		printf(BROWN "║" DARK_YELLOW " 2)" YELLOW " Inverse Array" BROWN "             ║\n");
+		printf(BROWN "║" DARK_YELLOW " 3)" YELLOW " Shuffled Array" BROWN "            ║\n");
 		printf(BROWN"╚══════════════════════════════╝\n");
 
 		printf(DARK_YELLOW"Option: " YELLOW);

@@ -233,7 +233,7 @@ def main() -> None:
 
 		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento", "Tiempo (s)", SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
 
-		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", "Tiempo (s) acumulado",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
+		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", "Tiempo (s)",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
 
 		print("Proccess completed successfully.")
 
