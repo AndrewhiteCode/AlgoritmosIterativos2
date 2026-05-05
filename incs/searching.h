@@ -14,6 +14,11 @@
 
 int linear_search(Player V[], int n, Player *x,int (*comp_f)(Player *, Player *));
 int binary_search(Player V[], int beg, int end, Player *x);
+int binary_search_recursive(Player V[], int beg, int end, Player *x);
+void binary_search_range(Player V[], int n, Player *x, int *first, int *last);
+int exponential_search(Player V[], int n, Player *x);
+int interpolation_search(Player V[], int n, Player *x);
+
 
 #endif
 

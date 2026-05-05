@@ -189,23 +189,28 @@ int main() {
 		printf(LIGHT_GREEN"\nCurrent file:" RESET "\n");
 		print_player_array_more(players, n);
 
-		printf(EVEN_DARKER_GREEN "   ╔════════════════════════╗\n");
-		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "   Choose a searching   " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN " algorithm (Only by ID) " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "╔══╩════════════════════════╩══╗\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 1)" LIGHT_GREEN " Linear Search             " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 2)" LIGHT_GREEN " Binary Search             " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "╚══════════════════════════════╝\n");
+		printf(EVEN_DARKER_GREEN "   ╔═════════════════════════════════════╗\n");
+		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "      Choose a searching algorithm   " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "            (Only by ID)             " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "╔══╩═════════════════════════════════════╩══╗\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 1)" LIGHT_GREEN " Linear Search                       " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 2)" LIGHT_GREEN " Binary Search (Iterative)           " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 3)" LIGHT_GREEN " Binary Search (Recursive)           " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 4)" LIGHT_GREEN " Binary Search (Ranges)              " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 5)" LIGHT_GREEN " Exponential Search                  " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 6)" LIGHT_GREEN " Interpolation Search                " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "╚═══════════════════════════════════════════╝\n");
 
 		printf(DARK_GREEN"Option: " LIGHT_GREEN);
 		check = scanf("%d", &searchOption);
-		while (check != 1 || searchOption < 1 || searchOption > 2) {
+		// Actualizamos la validación para que acepte hasta la opción 6
+		while (check != 1 || searchOption < 1 || searchOption > 6) {
 			printf(EVEN_DARKER_GREEN "Invalid option, try again: " DARK_GREEN);
 			while (getchar() != '\n');
 			check = scanf("%d", &searchOption);
 		}
 
-		if (searchOption == 1 || searchOption == 2) {
+		if (searchOption >= 1 && searchOption <= 6) {
 			printf(DARK_GREEN "\nType the ID to search: " LIGHT_GREEN);
 			check = scanf("%d", &searchId);
 			while (check != 1) {
@@ -215,6 +220,13 @@ int main() {
 			}
 			
 			Player target = {searchId, "", "", 0.0, 0, false};
+
+			// Si NO es búsqueda lineal, ordenamos el arreglo antes de buscar
+			if (searchOption >= 2) {
+				cocktail_shaker_sort(players, n, compare_id);
+				printf(LIGHT_GREEN "\nOrdered array (by ID) used for advanced search:" RESET "\n");
+				print_player_array_more(players, n);
+			}
 
 			if (searchOption == 1) {
 				result = linear_search(players, n, &target, compare_id);
@@ -227,20 +239,56 @@ int main() {
 				}
 			} 
 			else if (searchOption == 2) {
-				cocktail_shaker_sort(players, n, compare_id);
-
-				printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:" RESET "\n");
-				print_player_array_more(players, n);
-
 				result = binary_search(players, 0, n - 1, &target);
-
-				// Adios. o/
-				// main.py
 
 				if (result == -1) {
 					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
 				} else {
-					printf(BG_GREEN "Player found at index %d via Binary Search:" RESET "\n\n", result+1);
+					printf(BG_GREEN "Player found at index %d via Iterative Binary Search:" RESET "\n\n", result+1);
+					print_player(&players[result]);
+				}
+			}
+			else if (searchOption == 3) {
+				result = binary_search_recursive(players, 0, n - 1, &target);
+
+				if (result == -1) {
+					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
+				} else {
+					printf(BG_GREEN "Player found at index %d via Recursive Binary Search:" RESET "\n\n", result+1);
+					print_player(&players[result]);
+				}
+			}
+			else if (searchOption == 4) {
+				int first = -1, last = -1;
+				binary_search_range(players, n, &target, &first, &last);
+
+				if (first == -1) {
+					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
+				} else {
+					printf(BG_GREEN "Player(s) found from index %d to %d via Range Binary Search:" RESET "\n\n", first+1, last+1);
+					// Imprimir todos los jugadores en el rango encontrado
+					for (int i = first; i <= last; i++) {
+						print_player(&players[i]);
+					}
+				}
+			}
+			else if (searchOption == 5) {
+				result = exponential_search(players, n, &target);
+
+				if (result == -1) {
+					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
+				} else {
+					printf(BG_GREEN "Player found at index %d via Exponential Search:" RESET "\n\n", result+1);
+					print_player(&players[result]);
+				}
+			}
+			else if (searchOption == 6) {
+				result = interpolation_search(players, n, &target);
+
+				if (result == -1) {
+					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
+				} else {
+					printf(BG_GREEN "Player found at index %d via Interpolation Search:" RESET "\n\n", result+1);
 					print_player(&players[result]);
 				}
 			}
