@@ -10,7 +10,7 @@ OBJ_FILES=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 INCLUDE=-I./incs/
 LIBS= -lm
 
-CFLAGS=-Wall -Wextra -Wpedantic -O3
+CFLAGS=-Wall -Wextra -Wpedantic -g
 LDFLAGS= -Wall -lm
 
 # pero no creo que haya caido tan bajo como un !GUION BAJO!. 

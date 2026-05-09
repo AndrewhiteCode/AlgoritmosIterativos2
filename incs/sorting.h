@@ -11,6 +11,7 @@
 // generate_exec_times.h
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "player.h"
 
 /**
@@ -22,6 +23,9 @@ void swap_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void insertion_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
+void merge_sort_classic(Player V[], int n, int (*comp_f)(Player *, Player *));
+void merge_sort_optimized(Player V[], int n, int threshold, int (*comp_f)(Player *, Player *));
+void quick_sort(Player V[], int n, int pivot_type, int (*comp_f)(Player *, Player *));
 
 #endif // SORTING_H
 

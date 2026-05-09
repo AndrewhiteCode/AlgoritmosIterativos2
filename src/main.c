@@ -103,82 +103,108 @@ int main() {
 	}
 
 	else if (option == 3) { // Opcion 3: Ordenar arreglo
-		// Cargamos el arreglo de jugadores
-		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
-			return 1;
-		}
+        // Cargamos el arreglo de jugadores
+        if ((players = load_players("build/db/players.csv", &n)) == NULL) {
+            return 1;
+        }
 
-		printf(LIGHT_BLUE "\nOriginal file:\n" RESET);
-		print_player_array_more(players, n);
+        printf(LIGHT_BLUE "\nOriginal file:\n" RESET);
+        print_player_array_more(players, n);
 
-		
-		printf(EVEN_DARKER_BLUE"    ╔════════════════════════════╗\n");
-		printf(EVEN_DARKER_BLUE"    ║" LIGHT_BLUE " Choose a sorting algorithm " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "╔═══╩════════════════════════════╩═══╗\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " Swap Sort                       " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Insertion Sort                  " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Selection Sort                  " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Cocktail Shaker Sort            " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "╚════════════════════════════════════╝\n");
-		printf(DARK_BLUE "Option: " LIGHT_BLUE);
-		
-		check = scanf("%d", &sortOption);
-		while (check != 1 || sortOption < 1 || sortOption > 4) {
-			printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
-			while (getchar() != '\n');
-			check = scanf("%d", &sortOption);
-		}
+        
+        printf(EVEN_DARKER_BLUE"    ╔════════════════════════════╗\n");
+        printf(EVEN_DARKER_BLUE"    ║" LIGHT_BLUE " Choose a sorting algorithm " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "╔═══╩════════════════════════════╩═══╗\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " Swap Sort                       " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Insertion Sort                  " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Selection Sort                  " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Cocktail Shaker Sort            " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 5)" LIGHT_BLUE " Merge Sort (Classic)            " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 6)" LIGHT_BLUE " Merge Sort (Optimized)          " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 7)" LIGHT_BLUE " Quick Sort (Last Pivot)         " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 8)" LIGHT_BLUE " Quick Sort (First Pivot)        " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 9)" LIGHT_BLUE " Quick Sort (Random Pivot)       " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 10)" LIGHT_BLUE" Quick Sort (Median of 3)       " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "╚════════════════════════════════════╝\n");
+        printf(DARK_BLUE "Option: " LIGHT_BLUE);
+        
+        check = scanf("%d", &sortOption);
+        while (check != 1 || sortOption < 1 || sortOption > 10) {
+            printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
+            while (getchar() != '\n');
+            check = scanf("%d", &sortOption);
+        }
 
-		// Elegir el campo a ordenar
-		
-		printf(EVEN_DARKER_BLUE"   ╔══════════════════════╗\n");
-		printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE " Choose field to sort " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE "    by (Ascending)    " EVEN_DARKER_BLUE "║\n");
-		printf(EVEN_DARKER_BLUE "╔══╩══════════════════════╩══╗\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " ID                      " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Name                    " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Team                    " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Score                   " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 5)" LIGHT_BLUE " Competitions            " EVEN_DARKER_BLUE "║" "\n");
-		printf(EVEN_DARKER_BLUE "╚════════════════════════════╝\n");
+        // Si elige Merge Sort Optimizado, le pedimos el umbral para el Insertion Sort
+        int threshold = 10; // Valor por defecto
+        if (sortOption == 6) {
+            printf(DARK_BLUE "\nType the threshold for Insertion Sort (e.g. 10): " LIGHT_BLUE);
+            check = scanf("%d", &threshold);
+            while (check != 1 || threshold < 1) {
+                printf(EVEN_DARKER_BLUE"Invalid threshold, try again: " DARK_BLUE);
+                while (getchar() != '\n');
+                check = scanf("%d", &threshold);
+            }
+        }
 
-		printf(DARK_BLUE "Option: " LIGHT_BLUE);
+        // Elegir el campo a ordenar
+        
+        printf(EVEN_DARKER_BLUE"   ╔══════════════════════╗\n");
+        printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE " Choose field to sort " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE "    by (Ascending)    " EVEN_DARKER_BLUE "║\n");
+        printf(EVEN_DARKER_BLUE "╔══╩══════════════════════╩══╗\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " ID                      " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Name                    " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Team                    " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Score                   " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 5)" LIGHT_BLUE " Competitions            " EVEN_DARKER_BLUE "║" "\n");
+        printf(EVEN_DARKER_BLUE "╚════════════════════════════╝\n");
 
-		check = scanf("%d", &sortCriteria);
-		while (check != 1 || sortCriteria < 1 || sortCriteria > 5) {
-			printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
-			while (getchar() != '\n');
-			check = scanf("%d", &sortCriteria);
-		}
+        printf(DARK_BLUE "Option: " LIGHT_BLUE);
 
-		// Asignar el comparador segun la eleccion del usuario
-		int (*comp_ptr)(Player*, Player*) = NULL;
-		if (sortCriteria == 1) comp_ptr = compare_id;
-		else if (sortCriteria == 2) comp_ptr = compare_name;
-		else if (sortCriteria == 3) comp_ptr = compare_team;
-		else if (sortCriteria == 4) comp_ptr = compare_score;
-		else if (sortCriteria == 5) comp_ptr = compare_competitions;
-		else {
-			printf(RESET BG_RED "Invalid criteria option.\n" RESET);
-		}
+        check = scanf("%d", &sortCriteria);
+        while (check != 1 || sortCriteria < 1 || sortCriteria > 5) {
+            printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
+            while (getchar() != '\n');
+            check = scanf("%d", &sortCriteria);
+        }
 
-		// Ejecutar el ordenamiento
-		if (sortOption == 1) {
-			swap_sort(players, n, comp_ptr);
-		} else if (sortOption == 2) {
-			insertion_sort(players, n, comp_ptr);
-		} else if (sortOption == 3) {
-			selection_sort(players, n, comp_ptr);
-		} else if (sortOption == 4) {
-			cocktail_shaker_sort(players, n, comp_ptr);
-		} else {
-			printf(RESET BG_RED "Invalid sorting option.\n" RESET);
-		}
+        // Asignar el comparador segun la eleccion del usuario
+        int (*comp_ptr)(Player*, Player*) = NULL;
+        if (sortCriteria == 1) comp_ptr = compare_id;
+        else if (sortCriteria == 2) comp_ptr = compare_name;
+        else if (sortCriteria == 3) comp_ptr = compare_team;
+        else if (sortCriteria == 4) comp_ptr = compare_score;
+        else if (sortCriteria == 5) comp_ptr = compare_competitions;
+        else {
+            printf(RESET BG_RED "Invalid criteria option.\n" RESET);
+        }
 
-		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
-		print_player_array_more(players, n);
-		free(players);
-	}
+        // Ejecutar el ordenamiento
+        if (sortOption == 1) {
+            swap_sort(players, n, comp_ptr);
+        } else if (sortOption == 2) {
+            insertion_sort(players, n, comp_ptr);
+        } else if (sortOption == 3) {
+            selection_sort(players, n, comp_ptr);
+        } else if (sortOption == 4) {
+            cocktail_shaker_sort(players, n, comp_ptr);
+        } else if (sortOption == 5) {
+            merge_sort_classic(players, n, comp_ptr);
+        } else if (sortOption == 6) {
+            merge_sort_optimized(players, n, threshold, comp_ptr);
+        } else if (sortOption >= 7 && sortOption <= 10) {
+            // Transformamos la opcion del menu (7-10) al tipo de pivote (1-4)
+            int pivot_type = sortOption - 6; 
+            quick_sort(players, n, pivot_type, comp_ptr);
+        } else {
+            printf(RESET BG_RED "Invalid sorting option.\n" RESET);
+        }
+
+        printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
+        print_player_array_more(players, n);
+        free(players);
+    }
 
 	else if (option == 4) { // Opcion 4: Buscar valor
 		// Cargamos el arreglo de jugadores
@@ -223,7 +249,7 @@ int main() {
 
 			// Si NO es búsqueda lineal, ordenamos el arreglo antes de buscar
 			if (searchOption >= 2) {
-				cocktail_shaker_sort(players, n, compare_id);
+				quick_sort(players, n, 3, compare_id); // Cambiamos a Quick Sort con pivote aleatorio para ordenar por ID antes de la búsqueda binaria
 				printf(LIGHT_GREEN "\nOrdered array (by ID) used for advanced search:" RESET "\n");
 				print_player_array_more(players, n);
 			}
