@@ -86,22 +86,24 @@ int compare_team(Player *p1, Player *p2) {
  * * Evalua los valores de punto flotante (double) del campo `score`.
  * * @param p1 Puntero al primer jugador.
  * @param p2 Puntero al segundo jugador.
- * @return -1 si la puntuacion de p1 es menor, 1 si es mayor, 0 si son iguales.
+ * @return Desempate por ID.
  */
 int compare_score(Player *p1, Player *p2) {
 	if (p1->score > p2->score) return 1;
 	if (p1->score < p2->score) return -1;
-	return 0;
+	return p1->id - p2->id;
 }
 /**
  * @brief Compara dos jugadores basandose en la cantidad de competiciones.
  * * Compara los valores enteros del campo `competitions` jugadas por cada uno.
  * * @param p1 Puntero al primer jugador.
  * @param p2 Puntero al segundo jugador.
- * @return -1 si las competiciones de p1 son menores, 1 si son mayores, 0 si son iguales.
+ * @return Desempate por ID.
  */
 int compare_competitions(Player *p1, Player *p2) {
-	return p1->competitions - p2->competitions;
+    if (p1->competitions > p2->competitions) return 1;
+    if (p1->competitions < p2->competitions) return -1;
+	return p1->id - p2->id;
 }
 
 

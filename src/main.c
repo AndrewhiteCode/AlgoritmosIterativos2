@@ -28,7 +28,6 @@ int main() {
 	int sortCriteria;
 
 	// Variables para busqueda (Opcion 3)
-	int searchOption;
 	int searchId;
 	int result;
 
@@ -206,121 +205,115 @@ int main() {
         free(players);
     }
 
-	else if (option == 4) { // Opcion 4: Buscar valor
-		// Cargamos el arreglo de jugadores
-		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
-			return 1;
-		}
-	
-		printf(LIGHT_GREEN"\nCurrent file:" RESET "\n");
-		print_player_array_more(players, n);
+	else if (option == 4) { // Opcion 4: Data Analytics & Rankings
+        int subOption = 0, searchAlgo = 0, sortAlgo = 0;
+        int topN, k_rank;
+        float minScore, maxScore;
+        
+        printf(EVEN_DARKER_GREEN "\n   ╔═══════════════════════════════════════╗\n");
+        printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "    Data Analytics & Rankings Menu     " EVEN_DARKER_GREEN "║\n");
+        printf(EVEN_DARKER_GREEN "   ╚═══════════════════════════════════════╝\n");
+        printf(EVEN_DARKER_GREEN "   ║" DARK_GREEN " 1)" LIGHT_GREEN " Generate Top N Ranking (by Score)  " EVEN_DARKER_GREEN "║\n");
+        printf(EVEN_DARKER_GREEN "   ║" DARK_GREEN " 2)" LIGHT_GREEN " Find the K-th Best Athlete         " EVEN_DARKER_GREEN "║\n");
+        printf(EVEN_DARKER_GREEN "   ║" DARK_GREEN " 3) " LIGHT_GREEN "Search Athletes by Score Range     " EVEN_DARKER_GREEN "║\n");
+        printf(EVEN_DARKER_GREEN "   ║" DARK_GREEN " 4) " LIGHT_GREEN "Search Athlete by exact ID         " EVEN_DARKER_GREEN "║\n");
+        printf(EVEN_DARKER_GREEN "   ╚═══════════════════════════════════════╝\n");
+        
+        printf(DARK_GREEN "Selection: " LIGHT_GREEN);
+        scanf("%d", &subOption);
 
-		printf(EVEN_DARKER_GREEN "   ╔═════════════════════════════════════╗\n");
-		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "      Choose a searching algorithm   " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "            (Only by ID)             " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "╔══╩═════════════════════════════════════╩══╗\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 1)" LIGHT_GREEN " Linear Search                       " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 2)" LIGHT_GREEN " Binary Search (Iterative)           " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 3)" LIGHT_GREEN " Binary Search (Recursive)           " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 4)" LIGHT_GREEN " Binary Search (Ranges)              " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 5)" LIGHT_GREEN " Exponential Search                  " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 6)" LIGHT_GREEN " Interpolation Search                " EVEN_DARKER_GREEN "║" "\n");
-		printf(EVEN_DARKER_GREEN "╚═══════════════════════════════════════════╝\n");
+        if ((players = load_players("build/db/players.csv", &n)) == NULL) return 1;
 
-		printf(DARK_GREEN"Option: " LIGHT_GREEN);
-		check = scanf("%d", &searchOption);
-		// Actualizamos la validación para que acepte hasta la opción 6
-		while (check != 1 || searchOption < 1 || searchOption > 6) {
-			printf(EVEN_DARKER_GREEN "Invalid option, try again: " DARK_GREEN);
-			while (getchar() != '\n');
-			check = scanf("%d", &searchOption);
-		}
+        if (subOption == 1) { // TOP N RANKING
+            printf(DARK_GREEN "\nHow many top athletes? " LIGHT_GREEN);
+            scanf("%d", &topN);
+            
+            // SUBMENU DE ORDENAMIENTO
+            printf("\nChoose Sorting Algorithm:\n1) Quick Sort (Median of 3)\n2) Merge Sort (Optimized)\nSelection: ");
+            scanf("%d", &sortAlgo);
 
-		if (searchOption >= 1 && searchOption <= 6) {
-			printf(DARK_GREEN "\nType the ID to search: " LIGHT_GREEN);
-			check = scanf("%d", &searchId);
-			while (check != 1) {
-				printf(EVEN_DARKER_GREEN"Invalid ID, try again: " DARK_GREEN);
-				while (getchar() != '\n');
-				check = scanf("%d", &searchId);
-			}
-			
-			Player target = {searchId, "", "", 0.0, 0, false};
+            if (sortAlgo == 1) quick_sort(players, n, 4, compare_score);
+            else merge_sort_optimized(players, n, 10, compare_score);
+            
+            printf(BG_GREEN "\n--- TOP %d RANKING ---" RESET "\n\n", topN);
+            for (int i = 0; i < topN && i < n; i++) print_player(&players[n - 1 - i]);
+        }
+        else if (subOption == 2) { // K-TH BEST
+            printf(DARK_GREEN "\nEnter rank (K): " LIGHT_GREEN);
+            scanf("%d", &k_rank);
+            
+            printf("\nChoose Selection Algorithm:\n1) Quick Select (O(n))\n2) Full Sort + Index (O(n log n))\nSelection: ");
+            scanf("%d", &sortAlgo);
 
-			// Si NO es búsqueda lineal, ordenamos el arreglo antes de buscar
-			if (searchOption >= 2) {
-				quick_sort(players, n, 3, compare_id); // Cambiamos a Quick Sort con pivote aleatorio para ordenar por ID antes de la búsqueda binaria
-				printf(LIGHT_GREEN "\nOrdered array (by ID) used for advanced search:" RESET "\n");
-				print_player_array_more(players, n);
-			}
+            Player result_p;
+            if (sortAlgo == 1) {
+                result_p = quick_select(players, n, n - k_rank, 3, compare_score);
+            } else {
+                quick_sort(players, n, 3, compare_score);
+                result_p = players[n - k_rank];
+            }
+            print_player(&result_p);
+        }
+		else if (subOption == 3) { // SEARCH BY SCORE RANGE
+            printf(DARK_GREEN "\nMin Score: " LIGHT_GREEN);
+            check = scanf("%f", &minScore);
+            printf(DARK_GREEN "Max Score: " LIGHT_GREEN);
+            check = scanf("%f", &maxScore);
 
-			if (searchOption == 1) {
-				result = linear_search(players, n, &target, compare_id);
+            /* JUSTIFICACIÓN: Para buscar un rango de manera eficiente, primero ordenamos el 
+               arreglo por Score. Quick Sort (O(n log n)) es ideal para preparar los datos. */
+            quick_sort(players, n, 3, compare_score);
+            
+            printf(BG_GREEN "\nAthletes with scores between %.1f and %.1f:" RESET "\n\n", minScore, maxScore);
+            int count = 0;
+            // Al estar ordenado, podemos mostrar todos los que caigan en el rango
+            for(int i = 0; i < n; i++) {
+                if (players[i].score >= minScore && players[i].score <= maxScore) {
+                    print_player(&players[i]);
+                    count++;
+				if (count >= 10) {
+                    printf(DARK_GRAY "\n... Limit of 10 reached.\n" RESET);
+                    break; 
+                    }
+                }
+                // Como está ordenado ascendentemente, si nos pasamos del máximo, podemos detener el ciclo para ahorrar tiempo
+                if (players[i].score > maxScore) break; 
+            }
+            if (count == 0) printf(BG_RED "No athletes found in this range." RESET "\n");
+        }
+        else if (subOption == 4) { // EXACT ID SEARCH
+            printf("\nChoose Searching Algorithm:\n1) Linear\n2) Binary (Iterative)\n3) Binary (Recursive)\n4) Exponential\n5) Interpolation\nSelection: ");
+            scanf("%d", &searchAlgo);
 
-				if (result == n) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player found at index %d via Linear Search:" RESET "\n\n", result+1);
-					print_player(&players[result]);
-				}
-			} 
-			else if (searchOption == 2) {
-				result = binary_search(players, 0, n - 1, &target);
+            printf(DARK_GREEN "\nEnter exact ID: " LIGHT_GREEN);
+            scanf("%d", &searchId);
+            Player target = {searchId, "", "", 0.0, 0, false};
+            
+            // Si el algoritmo requiere orden previo (Binarias, Exponencial, Interpolación)
+            if (searchAlgo >= 2) {
+                quick_sort(players, n, 3, compare_id);
+            }
 
-				if (result == -1) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player found at index %d via Iterative Binary Search:" RESET "\n\n", result+1);
-					print_player(&players[result]);
-				}
-			}
-			else if (searchOption == 3) {
-				result = binary_search_recursive(players, 0, n - 1, &target);
-
-				if (result == -1) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player found at index %d via Recursive Binary Search:" RESET "\n\n", result+1);
-					print_player(&players[result]);
-				}
-			}
-			else if (searchOption == 4) {
-				int first = -1, last = -1;
-				binary_search_range(players, n, &target, &first, &last);
-
-				if (first == -1) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player(s) found from index %d to %d via Range Binary Search:" RESET "\n\n", first+1, last+1);
-					// Imprimir todos los jugadores en el rango encontrado
-					for (int i = first; i <= last; i++) {
-						print_player(&players[i]);
-					}
-				}
-			}
-			else if (searchOption == 5) {
-				result = exponential_search(players, n, &target);
-
-				if (result == -1) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player found at index %d via Exponential Search:" RESET "\n\n", result+1);
-					print_player(&players[result]);
-				}
-			}
-			else if (searchOption == 6) {
-				result = interpolation_search(players, n, &target);
-
-				if (result == -1) {
-					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
-				} else {
-					printf(BG_GREEN "Player found at index %d via Interpolation Search:" RESET "\n\n", result+1);
-					print_player(&players[result]);
-				}
-			}
-		}
-		free(players);
-	}
+            // Ejecutamos el algoritmo seleccionado
+            if (searchAlgo == 1) result = linear_search(players, n, &target, compare_id);
+            else if (searchAlgo == 2) result = binary_search(players, 0, n-1, &target);
+            else if (searchAlgo == 3) result = binary_search_recursive(players, 0, n-1, &target);
+            else if (searchAlgo == 4) result = exponential_search(players, n, &target);
+            else if (searchAlgo == 5) result = interpolation_search(players, n, &target);
+            else {
+                printf(BG_RED "Invalid search algorithm." RESET "\n");
+                result = -1;
+            }
+            
+            if (result != -1 && result != n) {
+                printf(BG_GREEN "\nAthlete found:" RESET "\n\n");
+                print_player(&players[result]);
+            } else {
+                printf(BG_RED "\nAthlete with ID %d not found." RESET "\n", searchId);
+            }
+        }
+        free(players);
+    }
 
 	else if (option == 5) { // Opcion 5: Ejecutar experimento
 		run_experiment();

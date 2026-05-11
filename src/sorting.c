@@ -266,3 +266,41 @@ void quick_sort_rec(Player V[], int low, int high, int pivot_type, int (*comp_f)
 void quick_sort(Player V[], int n, int pivot_type, int (*comp_f)(Player *, Player *)) {
     quick_sort_rec(V, 0, n - 1, pivot_type, comp_f);
 }
+
+/**
+ * @brief Función recursiva interna para Quick Select
+ * Utiliza la partición de Lomuto ya implementada para Quick Sort.
+ */
+static Player quick_select_rec(Player V[], int low, int high, int k, int pivot_type, int (*comp_f)(Player *, Player *)) {
+    // Si el arreglo tiene un solo elemento, devolvemos ese
+    if (low == high) {
+        return V[low];
+    }
+
+    // Reutilizamos lomuto_partition de tu Quick Sort
+    int pi = lomuto_partition(V, low, high, pivot_type, comp_f);
+
+    // Si el pivote quedó exactamente en la posición k, lo encontramos
+    if (pi == k) {
+        return V[pi];
+    } else if (k < pi) {
+        // Si k es menor, buscamos solo en la mitad izquierda
+        return quick_select_rec(V, low, pi - 1, k, pivot_type, comp_f);
+    } else {
+        // Si k es mayor, buscamos solo en la mitad derecha
+        return quick_select_rec(V, pi + 1, high, k, pivot_type, comp_f);
+    }
+}
+
+/**
+ * @brief Retorna el k-ésimo elemento del arreglo (0-indexado) basado en un criterio
+ * @param k El índice del elemento a buscar (ej. k=0 es el menor absoluto).
+ * @return Retorna un jugador vacío/inválido en caso de error
+ */
+Player quick_select(Player V[], int n, int k, int pivot_type, int (*comp_f)(Player *, Player *)) {
+    if (k < 0 || k >= n) {
+        Player empty = {-1, "", "", 0.0, 0, false};
+        return empty;
+    }
+    return quick_select_rec(V, 0, n - 1, k, pivot_type, comp_f);
+}

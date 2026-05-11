@@ -26,6 +26,7 @@ void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void merge_sort_classic(Player V[], int n, int (*comp_f)(Player *, Player *));
 void merge_sort_optimized(Player V[], int n, int threshold, int (*comp_f)(Player *, Player *));
 void quick_sort(Player V[], int n, int pivot_type, int (*comp_f)(Player *, Player *));
+Player quick_select(Player V[], int n, int k, int pivot_type, int (*comp_f)(Player *, Player *));
 
 #endif // SORTING_H
 
