@@ -5,9 +5,8 @@
  */
 #ifndef EXEC_H
 #define EXEC_H
-#define NUM_TRIALS 1000
+#define NUM_TRIALS 100
 #define NUM_STEPS 20
-// piernafloo *crack*
 #include <stdio.h>
 #include <time.h>
 
@@ -19,16 +18,20 @@
 
 typedef struct ExecResults {
     int n;
+    // Tarea 1: Cuadráticos O(n^2)
     double timeSwapSort;
     double timeInsertionSort;
     double timeSelectionSort;
     double timeCocktailSort;
-    double timeLinearSearch;
-    double timeBinarySearch;
+    // Tarea 2: Divide y Vencerás O(n log n)
+    double timeMergeClassic;
+    double timeMergeOpt10;
+    double timeMergeOpt50;
+    double timeQuickLast;
+    double timeQuickRandom;
+    double timeQuickMedian;
 } ExecResults;
 
-// Pero bueno, finalizo esta carta que te escribo desde mi hoja !A4!.
-// main.c
 
 void run_experiment(void);
 

@@ -1,19 +1,21 @@
 /**
  * @file generate_exec_times.c
  * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
- * @brief Funciones para la ejecution de tests
+ * @brief Funciones para la ejecución de pruebas experimentales de algoritmos.
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include "generate_exec_times.h"
 #include "utilities.h"
 
 /**
- * @brief Ejecuta un experimento de ordenamiento y busqueda generando un CSV con los resultados
- * 
+ * @brief Ejecuta un experimento masivo comparando 10 algoritmos de ordenamiento
+ * y los algoritmos de búsqueda, generando un reporte detallado en CSV.
  */
 void run_experiment()
 {
-	int n = 0; // Cantidad de jugadores
+	int n = 0; 
 	Player* players;
 	if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return;
@@ -22,166 +24,161 @@ void run_experiment()
 	print_player_array(players, n);
 
 	const int num_points = NUM_STEPS;
-	ExecResults resultados[num_points];
-	int struct_idx = 0;
-
+	
 	// Inicializamos los arreglos de jugadores
-	Player* swapSortPlayers = malloc(n * sizeof(Player));
-	Player* insertionSortPlayers = malloc(n * sizeof(Player));
-	Player* selectionSortPlayers = malloc(n * sizeof(Player));
-	Player* cocktailShakerSortPlayers = malloc(n * sizeof(Player));
-	Player* linearSearchPlayers = malloc(n * sizeof(Player));
-	Player* binarySearchPlayers = malloc(n * sizeof(Player));
+	Player* swapSortP = malloc(n * sizeof(Player));
+	Player* insertionSortP = malloc(n * sizeof(Player));
+	Player* selectionSortP = malloc(n * sizeof(Player));
+	Player* cocktailP = malloc(n * sizeof(Player));
+	Player* mergeClassicP = malloc(n * sizeof(Player));
+	Player* mergeOpt10P = malloc(n * sizeof(Player));
+	Player* mergeOpt50P = malloc(n * sizeof(Player));
+	Player* quickLastP = malloc(n * sizeof(Player));
+	Player* quickRandP = malloc(n * sizeof(Player));
+	Player* quickMedianP = malloc(n * sizeof(Player));
 
-	if (!swapSortPlayers || !insertionSortPlayers || !selectionSortPlayers || !cocktailShakerSortPlayers || !linearSearchPlayers || !binarySearchPlayers) {
-		free(swapSortPlayers);
-		free(insertionSortPlayers);
-		free(selectionSortPlayers);
-		free(cocktailShakerSortPlayers);
-		free(linearSearchPlayers);
-		free(binarySearchPlayers);
+	if (!swapSortP || !insertionSortP || !selectionSortP || !cocktailP || !mergeClassicP || !mergeOpt10P || !mergeOpt50P || !quickLastP || !quickRandP || !quickMedianP) {
 		print_error(102, "players", NULL);
 		return;
 	}
 
 	// Abrimos el archivo de resultados
 	FILE *csv = fopen("build/db/experiment.csv", "w");
-	if (csv == NULL)
-	{
+	if (csv == NULL) {
 		print_error(101, "build/db/experiment.csv", NULL);
 		return;
 	}
 
-	fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Linear Search,Binary Search\n");
+    // ¡La magia para que main.py funcione! Todos tienen "Sort" en el nombre.
+	fprintf(csv, "N,Swap Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Merge Sort Classic,Merge Sort Opt(10),Merge Sort Opt(50),Quick Sort (Last),Quick Sort (Random),Quick Sort (Median)\n");
 
 	// header
-	printf(PURPLE "╔══════════════════════════════════════════╗\n");
+	printf(PURPLE "╔══════════════════════════════════════════════════════╗\n");
 
 	for (int s = 0; s < num_points; s++) {
-		// k crece desde 1 hasta n, repartido en NUM_STEPS puntos.
-		// La fórmula evita k = 0 y garantiza que el último punto sea n.
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		Player target = {n+1, "", "", 0.0, 0, false}; // Jugador buscado de ejemplo
-		
-		// !PARTIA! el aire de la nada y me preguntaba:
-		// utilites.h
-
-		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
-		printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
-		//printf(PURPLE "║                                          ║\n");
+		printf(PURPLE "║" MAGENTA " Procesando n =" WHITE" %8d" PURPLE "                             ║\n", k);
+		printf(PURPLE "║" MAGENTA " Paso:" WHITE" %4d/%4d" PURPLE "                                     ║\n", s+1, num_points);
 		clock_t start, end;
 
-		// Tiempos Bubble Sort
-		double timeSwapSort = 0;
+		// --- Tiempos Swap Sort ---
+		double tSwap = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(swapSortPlayers, players, k * sizeof(Player));
-			start = clock();
-			swap_sort(swapSortPlayers, k, compare_id);
-			end = clock();
-			timeSwapSort += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(swapSortP, players, k * sizeof(Player));
+			start = clock(); swap_sort(swapSortP, k, compare_id); end = clock();
+			tSwap += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeSwapSort /= NUM_TRIALS;
-		printf(PURPLE "║" MAG1 "\tSwap Sort:" WHITE " %f\t" PURPLE "           ║\n", timeSwapSort);
+		tSwap /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_BLUE "\tSwap Sort:             " WHITE " %f\t" PURPLE "       ║\n", tSwap);
  
-
-		// Tiempos Insertion Sort
-		double timeInsertionSort = 0;
+		// --- Tiempos Insertion Sort ---
+		double tIns = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(insertionSortPlayers, players, k * sizeof(Player));
-			start = clock();
-			insertion_sort(insertionSortPlayers, k, compare_id);
-			end = clock();
-			timeInsertionSort += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(insertionSortP, players, k * sizeof(Player));
+			start = clock(); insertion_sort(insertionSortP, k, compare_id); end = clock();
+			tIns += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeInsertionSort /= NUM_TRIALS;
-		printf(PURPLE "║" MAG2 "\tInsertion Sort:" WHITE " %f\t" PURPLE "   ║\n", timeInsertionSort);
+		tIns /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_BLUE "\tInsertion Sort:        " WHITE " %f\t" PURPLE "       ║\n", tIns);
 		
-		// Tiempos Selection Sort
-		double timeSelectionSort = 0;
+		// --- Tiempos Selection Sort ---
+		double tSel = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(selectionSortPlayers, players, k * sizeof(Player));
-			start = clock();
-			selection_sort(selectionSortPlayers, k, compare_id);
-			end = clock();
-			timeSelectionSort += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(selectionSortP, players, k * sizeof(Player));
+			start = clock(); selection_sort(selectionSortP, k, compare_id); end = clock();
+			tSel += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeSelectionSort /= NUM_TRIALS;
-		printf(PURPLE "║" MAG3 "\tSelection Sort:" WHITE " %f\t" PURPLE "   ║\n", timeSelectionSort);
+		tSel /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_BLUE "\tSelection Sort:        " WHITE " %f\t" PURPLE "       ║\n", tSel);
 
-		// Tiempos Cocktail Shaker Sort
-		double timeCocktailSort = 0;
+		// --- Tiempos Cocktail Shaker Sort ---
+		double tCock = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(cocktailShakerSortPlayers, players, k * sizeof(Player));
-			start = clock();
-			cocktail_shaker_sort(cocktailShakerSortPlayers, k, compare_id);
-			end = clock();
-			timeCocktailSort += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(cocktailP, players, k * sizeof(Player));
+			start = clock(); cocktail_shaker_sort(cocktailP, k, compare_id); end = clock();
+			tCock += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeCocktailSort /= NUM_TRIALS;
-		printf(PURPLE "║" MAG4 "\tCocktail Shaker Sort:" WHITE " %f" PURPLE "     ║\n", timeCocktailSort);
+		tCock /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_BLUE "\tCocktail Shaker Sort:  " WHITE " %f" PURPLE "         ║\n", tCock);
 
-		// Tiempos Linear Search
-		double timeLinearSearch = 0;
+        // --- Tiempos Merge Sort Classic ---
+		double tMergeClas = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(linearSearchPlayers, players, k * sizeof(Player));
-			start = clock();
-			linear_search(linearSearchPlayers, k, &target, compare_id);
-			end = clock();
-			timeLinearSearch += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(mergeClassicP, players, k * sizeof(Player));
+			start = clock(); merge_sort_classic(mergeClassicP, k, compare_id); end = clock();
+			tMergeClas += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeLinearSearch /= NUM_TRIALS;
-		printf( PURPLE "║" MAG5 "\tLinear Search:" WHITE " %f" PURPLE "            ║\n", timeLinearSearch);
+		tMergeClas /= NUM_TRIALS;
+		printf(PURPLE "║" YELLOW "\tMerge Sort Classic:    " WHITE " %f" PURPLE "         ║\n", tMergeClas);
 
-		// Tiempos Binary Search
-		// USAMOS UN ARREGLO DE LOS YA ORDENADOS COMO INPUT
-		double timeBinarySearch = 0;
+        // --- Tiempos Merge Sort Opt(10) ---
+		double tMerge10 = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(binarySearchPlayers, cocktailShakerSortPlayers, k * sizeof(Player));
-			start = clock();
-			binary_search(binarySearchPlayers, 0, k - 1, &target);
-			end = clock();
-			timeBinarySearch += (double)(end - start) / CLOCKS_PER_SEC;
+			memcpy(mergeOpt10P, players, k * sizeof(Player));
+			start = clock(); merge_sort_optimized(mergeOpt10P, k, 10, compare_id); end = clock();
+			tMerge10 += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeBinarySearch /= NUM_TRIALS;
-		printf( PURPLE "║" MAG6 "\tBinary Search:" WHITE " %f" PURPLE "            ║\n", timeBinarySearch);
+		tMerge10 /= NUM_TRIALS;
+		printf(PURPLE "║" YELLOW "\tMerge Sort Opt(10):    " WHITE " %f" PURPLE "         ║\n", tMerge10);
 
-		resultados[struct_idx].n = k;
-		resultados[struct_idx].timeSwapSort = timeSwapSort;
-		resultados[struct_idx].timeInsertionSort = timeInsertionSort;
-		resultados[struct_idx].timeSelectionSort = timeSelectionSort;
-		resultados[struct_idx].timeCocktailSort = timeCocktailSort;
-		resultados[struct_idx].timeLinearSearch = timeLinearSearch;
-		resultados[struct_idx].timeBinarySearch = timeBinarySearch;
+        // --- Tiempos Merge Sort Opt(50) ---
+		double tMerge50 = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(mergeOpt50P, players, k * sizeof(Player));
+			start = clock(); merge_sort_optimized(mergeOpt50P, k, 50, compare_id); end = clock();
+			tMerge50 += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		tMerge50 /= NUM_TRIALS;
+		printf(PURPLE "║" YELLOW "\tMerge Sort Opt(50):    " WHITE " %f" PURPLE "         ║\n", tMerge50);
+
+        // --- Tiempos Quick Sort (Last) ---
+		double tQuickLast = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(quickLastP, players, k * sizeof(Player));
+			start = clock(); quick_sort(quickLastP, k, 1, compare_id); end = clock();
+			tQuickLast += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		tQuickLast /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Last):     " WHITE " %f" PURPLE "         ║\n", tQuickLast);
+
+        // --- Tiempos Quick Sort (Random) ---
+		double tQuickRand = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(quickRandP, players, k * sizeof(Player));
+			start = clock(); quick_sort(quickRandP, k, 3, compare_id); end = clock();
+			tQuickRand += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		tQuickRand /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Random):   " WHITE " %f" PURPLE "         ║\n", tQuickRand);
+
+        // --- Tiempos Quick Sort (Median) ---
+		double tQuickMed = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(quickMedianP, players, k * sizeof(Player));
+			start = clock(); quick_sort(quickMedianP, k, 4, compare_id); end = clock();
+			tQuickMed += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		tQuickMed /= NUM_TRIALS;
+		printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Median):   " WHITE " %f" PURPLE "         ║\n", tQuickMed);
+
 
 		// Guardar en CSV
 		fprintf(csv,
-				"%d,%f,%f,%f,%f,%f,%f\n",
-				resultados[struct_idx].n,
-				resultados[struct_idx].timeSwapSort,
-				resultados[struct_idx].timeInsertionSort,
-				resultados[struct_idx].timeSelectionSort,
-				resultados[struct_idx].timeCocktailSort,
-				resultados[struct_idx].timeLinearSearch,
-				resultados[struct_idx].timeBinarySearch
+				"%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+				k, tSwap, tIns, tSel, tCock, tMergeClas, tMerge10, tMerge50, tQuickLast, tQuickRand, tQuickMed
 			);        
-		printf(PURPLE "╠══════════════════════════════════════════╣\n");
-		struct_idx++;
+		printf(PURPLE "╠══════════════════════════════════════════════════════╣\n");
 	}
 	// end of table
-	printf(PURPLE "║" LIGHT_GREEN "              CSV Data written" PURPLE "            ║\n");
-	printf(PURPLE "╚══════════════════════════════════════════╝\n" RESET);
+	printf(PURPLE "║" LIGHT_GREEN "                  CSV Data written                    " PURPLE "║\n");
+	printf(PURPLE "╚══════════════════════════════════════════════════════╝\n" RESET);
 	fclose(csv);
 
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
-	// MILTON LE COPIO A ARIEL??? :O
-
 	free(players);
-	free(swapSortPlayers);
-	free(insertionSortPlayers);
-	free(selectionSortPlayers);
-	free(cocktailShakerSortPlayers);
-	free(linearSearchPlayers);
-	free(binarySearchPlayers);
+	free(swapSortP); free(insertionSortP); free(selectionSortP); free(cocktailP);
+	free(mergeClassicP); free(mergeOpt10P); free(mergeOpt50P);
+	free(quickLastP); free(quickRandP); free(quickMedianP);
 }
