@@ -12,3 +12,25 @@ allegro6/.venv/
 .venv/
 docs/results/
 docs/Informe/build/
+
+# LaTeX
+*.aux
+*.bbl
+*.bbl-SAVE-ERROR
+*.blg
+*.bcf
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.lot
+*.lof
+*.nav
+*.pdf
+*.ps
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+docs/Informe/*.pdf

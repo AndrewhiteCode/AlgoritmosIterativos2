@@ -305,9 +305,9 @@
     \begin{flushleft}
         \makebox[\textwidth][l]{
             % Logo a la izquierda ocupando 40% del ancho de la página
-            \begin{minipage}[t]{0.4\textwidth} % 't' para alinear el contenido superiormente
+                \begin{minipage}[t]{0.4\textwidth} % 't' para alinear el contenido superiormente
                 \vspace{-1.5em} % Ajusta este valor según sea necesario
-                \includegraphics[width=\linewidth]{src/figures/logo-umag-ing.png} % Ajusta el tamaño del logo
+                \IfFileExists{src/figures/logo-umag-ing.png}{\includegraphics[width=\linewidth]{src/figures/logo-umag-ing.png}}{\fbox{Logo no disponible}}
             \end{minipage}
             % Línea vertical para separar el logo del título
             \vrule width 1pt\hspace{10pt} % Línea de 1pt de ancho y un espacio de 10pt

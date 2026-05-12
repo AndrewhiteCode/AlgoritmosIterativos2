@@ -15,14 +15,14 @@
 %----------------------------------------------------------
 
 %\journalname{Example Template}
-\title{Estudio de la complejidad temporal de algoritmos iterativos de búsqueda y ordenamiento}
+\title{Análisis de la complejidad temporal de algoritmos de Divide y Vencerás: Ordenamiento, búsqueda recursiva y selección}
 
 %----------------------------------------------------------
 % AUTHORS AND AFFILIATIONS
 %----------------------------------------------------------
 \author[$\dagger$]{Andres Barbosa}
-\author[$\dagger$]{Milton Hernandez}
-\author[$\dagger$]{Iván Gallardo}
+\author[$\dagger$]{Emmanuel Velásquez}
+\author[$\dagger$]{Diego Oyarzo}
 
 %----------------------------------------------------------
 
@@ -142,12 +142,12 @@
 %----------------------------------------------------------
 
 \begin{abstract}
-En este informe se presenta un estudio comparativo de la complejidad temporal de algoritmos iterativos de búsqueda y ordenamiento aplicados a una base de datos ficticia de deportistas. Los experimentos se llevaron a cabo sobre conjuntos de datos de hasta 7000 elementos en tres escenarios de distribución distintos (Elementos previamente ordenados, en orden inverso y en orden aleatorio).
+En este informe se presenta un estudio comparativo de la complejidad temporal de algoritmos recursivos de ordenamiento, búsqueda y selección basados en la estrategia de Divide y Vencerás, aplicados a una base de datos ficticia de deportistas. Se analizan distintas variantes de cada algoritmo (p. ej., diferentes estrategias de selección de pivote en Quick Sort y umbrales de optimización en Merge Sort) evaluando su impacto en el rendimiento. Los experimentos se llevaron a cabo sobre conjuntos de datos de hasta 7000 elementos, con repeticiones múltiples para reducir variabilidad experimental.
 
-Los resultados demostraron una correspondencia significativa entre el análisis teórico de complejidad temporal y el comportamiento experimental observado.
+Los resultados demostraron una correspondencia significativa entre el análisis teórico de complejidad temporal y el comportamiento experimental observado, permitiendo validar las características de rendimiento de cada algoritmo en el mejor, peor y caso promedio.
 \end{abstract}
 
-\keywords{Algoritmos iterativos, Complejidad temporal, Ordenamiento, Búsqueda, Análisis experimental.}
+\keywords{Divide y Vencerás, Algoritmos recursivos, Complejidad temporal, Ordenamiento, Búsqueda, Selección, Análisis experimental.}
 
 %----------------------------------------------------------
 \begin{document}
@@ -169,8 +169,8 @@ Los resultados demostraron una correspondencia significativa entre el análisis 
 \section{Contribución por integrante}
 A continuación se detalla la contribución realizada por cada uno de los integrantes del grupo en el desarrollo del proyecto.
 \input{src/sections/contribucion_andres.tex}
-\input{src/sections/contribucion_milton.tex}
-\input{src/sections/contribucion_ivan.tex}
+\input{src/sections/contribucion_emmanuel.tex}
+\input{src/sections/contribucion_diego.tex}
 \newpage
 \input{src/sections/anexos.tex}
 

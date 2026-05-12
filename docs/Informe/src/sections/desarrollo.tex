@@ -392,12 +392,21 @@ Todos los experimentos se realizaron considerando un conjunto de \textbf{7000 el
 
 Para evaluar los algoritmos de búsqueda se seleccionó un \textbf{elemento con identificador $n+1$ en un arreglo de tamaño $n$}. Esta estrategia garantiza que el elemento buscado nunca existe en la estructura de datos, asegurando que ambos algoritmos siempre enfrenten su \textbf{peor caso posible}: la búsqueda exhaustiva sin encontrar el elemento objetivo.
 
+\IfFileExists{src/figures/searching_shuffled.png}{%
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/figures/searching_shuffled.png}
     \caption{Comparación de algoritmos de búsqueda partiendo de un arreglo desordenado}
     \label{fig:searching_shuffled}
 \end{figure}
+}{%
+\begin{figure}[ht]
+    \centering
+    \fbox{Figura no disponible}
+    \caption{Comparación de algoritmos de búsqueda (figura no disponible)}
+    \label{fig:searching_shuffled}
+\end{figure}
+}
 
 Los resultados demuestran una diferencia radical de rendimiento entre los dos algoritmos. Es importante destacar que \textbf{Binary Search} requiere un arreglo previamente ordenado; sin embargo, el tiempo de ordenamiento \textbf{no está contabilizado} en el tiempo de ejecución del algoritmo de búsqueda.
 
@@ -417,34 +426,61 @@ Los algoritmos de ordenamiento se evaluaron bajo \textbf{tres escenarios distint
 
 \subsubsection{Arreglo Ordenado (Mejor Caso)}
 
+\IfFileExists{src/figures/sorting_normal.png}{%
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/figures/sorting_normal.png}
     \caption{Comparación de algoritmos de ordenamiento con arreglo ya ordenado (escala logarítmica)}
     \label{fig:sorting_normal}
 \end{figure}
+}{%
+\begin{figure}[ht]
+    \centering
+    \fbox{Figura no disponible}
+    \caption{Comparación de algoritmos de ordenamiento (figura no disponible)}
+    \label{fig:sorting_normal}
+\end{figure}
+}
 
 En el mejor caso, donde el arreglo ya se encuentra ordenado, se observa claramente que \textbf{Selection Sort} es el algoritmo más desventajoso. A diferencia de otros algoritmos que pueden reconocer el estado ordenado y terminar anticipadamente, Selection Sort realiza comparaciones exhaustivas que nunca disminuyen, independientemente del estado inicial de los datos. Su complejidad $O(n^2)$ permanece constante incluso cuando es innecesaria toda la labor de comparación.
 
 \subsubsection{Arreglo en Orden Inverso (Peor Caso)}
 
+\IfFileExists{src/figures/sorting_inverse.png}{%
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/figures/sorting_inverse.png}
     \caption{Comparación de algoritmos de ordenamiento con arreglo en orden inverso}
     \label{fig:sorting_inverse}
 \end{figure}
+}{%
+\begin{figure}[ht]
+    \centering
+    \fbox{Figura no disponible}
+    \caption{Comparación de algoritmos de ordenamiento (figura no disponible)}
+    \label{fig:sorting_inverse}
+\end{figure}
+}
 
 En el peor caso (arreglo en orden inverso), los resultados revelan que \textbf{Insertion Sort} es considerablemente más eficiente que sus competidores, ejecutándose en aproximadamente la mitad del tiempo de Selection Sort.
 
 \subsubsection{Arreglo Desordenado (Caso Promedio)}
 
+\IfFileExists{src/figures/sorting_shuffled.png}{%
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/figures/sorting_shuffled.png}
     \caption{Comparación de algoritmos de ordenamiento con arreglo en desorden}
     \label{fig:sorting_shuffled}
 \end{figure}
+}{%
+\begin{figure}[ht]
+    \centering
+    \fbox{Figura no disponible}
+    \caption{Comparación de algoritmos de ordenamiento (figura no disponible)}
+    \label{fig:sorting_shuffled}
+\end{figure}
+}
 
 En el caso promedio, con datos aleatorios, \textbf{Insertion Sort} se posiciona nuevamente como el algoritmo más eficiente. Selection Sort continúa mostrando bajo rendimiento, siendo superado en los últimos puntos por Swap Sort, aunque la diferencia es marginal.
 
