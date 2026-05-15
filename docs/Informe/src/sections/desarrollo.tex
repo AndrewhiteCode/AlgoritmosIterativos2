@@ -22,13 +22,13 @@ El algoritmo Merge Sort basa su funcionamiento en dividir el arreglo por la mita
 \end{algorithm}
 
 \textbf{Análisis de Complejidad:}
-Merge Sort siempre divide el arreglo en dos mitades, tomando tiempo constante $\mathcal{O}(1)$. La función \textsc{Merge} combina dos sub-arreglos transicionando todos sus $n$ elementos, lo cual toma $\mathcal{O}(n)$.
+Merge Sort siempre divide el arreglo en dos mitades, tomando tiempo constante $\mathcal{O}(1)$. La función \textsc{Merge} combina dos sub-arreglos procesando todos sus $n$ elementos, lo cual toma $\mathcal{O}(n)$.
 La relación de recurrencia aplicable es:
 \[ T(n) = 2T(n/2) + \mathcal{O}(n) \]
-Por el Teorema Maestro, esto siempre resulta en una complejidad temporal constante de $\mathcal{O}(n \log n)$ en el mejor, peor y caso promedio.
+Por el Teorema Maestro, esto resulta en una complejidad temporal de $\mathcal{O}(n \log n)$ en el mejor, peor y caso promedio.
 
 \textbf{Variante Optimizada con Umbral (Threshold):}
-Al delegar excesivamente al sistema la creación de árboles recursivos inmensos de llamadas y arreglos subyacentes mínimos, se penaliza el rendimiento. Algoritmos de orden cuadrático como \textit{Insertion Sort} poseen gastos constantes diminutos para entradas limitadas. La variante optimizada introduce un límite de recursión (\textit{UMBRAL} o \textit{threshold}); si el tamaño de un sub-arreglo alcanza un $n \le \text{Threshold}$, se corta la fragmentación y se despacha a la rutina de Insertion Sort, mejorando notamblemente los tiempos empíricos a pesar de mantener su categoría perimetral $\mathcal{O}(n \log n)$.
+Al delegar excesivamente al sistema la creación de árboles recursivos inmensos de llamadas y arreglos subyacentes mínimos, se penaliza el rendimiento. Algoritmos de orden cuadrático como \textit{Insertion Sort} poseen gastos constantes diminutos para entradas limitadas. La variante optimizada introduce un límite de recursión (\textit{UMBRAL} o \textit{threshold}); si el tamaño de un sub-arreglo alcanza un $n \le \text{Threshold}$, se corta la fragmentación y se despacha a la rutina de Insertion Sort, mejorando notablemente los tiempos empíricos sin alterar su cota asintótica principal $\mathcal{O}(n \log n)$.
 
 \subsubsection{Quick Sort y sus Variantes de Pivote}\label{sec:quick_sort}
 Quick Sort selecciona un elemento referencial o \textit{pivote} y particiona el arreglo utilizando el esquema de partición original de \textbf{Lomuto}. Todos los datos menores que el pivote recaen iterativamente a su lado izquierdo, mientras que los remanentes se asientan a su derecha. Finalmente, propaga sus llamadas lógicas separadamente.
@@ -46,10 +46,10 @@ Quick Sort selecciona un elemento referencial o \textit{pivote} y particiona el 
     \end{algorithmic}
 \end{algorithm}
 
-Dependiendo de cómo se selecciona el pivote antes de particionar, el algoritmo lidia diferentemente con las anomalías de los datos (como conjuntos ya previamente ordenados). Se implementaron 4 directrices:
+Dependiendo de cómo se selecciona el pivote antes de particionar, el algoritmo lidia diferentemente con las anomalías de los datos (como conjuntos ya previamente ordenados). Se implementaron varias directrices:
 \begin{itemize}
     \item \textbf{Último o Primer elemento:} Determinista e inherentemente veloz, pero susceptible y frágil frente a datos ya estructurados.
-    \item \textbf{Elemento Aleatorio:} Invoca a los temporizadores nativos en cada paso para elegir el límite. Es probabilísticamente resiliente al \textit{Peor Caso}.
+    \item \textbf{Elemento Aleatorio:} Selecciona un elemento aleatorio mediante un generador pseudoaleatorio. Es probabilísticamente resiliente frente al \textit{peor caso}.
     \item \textbf{Mediana de tres:} Escoge matemáticamente la mediana entre el primer, el central y el último elemento; aislando de forma consistente las desviaciones extremistas.
 \end{itemize}
 
@@ -83,7 +83,7 @@ Dependiendo de cómo se selecciona el pivote antes de particionar, el algoritmo 
     \end{algorithmic}
 \end{algorithm}
 
-Al igual que su versión iterativa de la tarea pasada, fragmenta la zona objetivo fraccionalmente. Conlleva una complejidad temporal de $\mathcal{O}(\log n)$ para el peor y caso promedio.
+Al igual que su versión iterativa de la tarea pasada, fragmenta la zona objetivo fraccionalmente. Conlleva una complejidad temporal de $\mathcal{O}(\log n)$ para el peor y el caso promedio.
 
 Por otro lado, la variante de \textbf{Búsqueda por Rango} aplica este mismo principio logarítmico para dictar umbrales a los topes izquierdo y derecho del arreglo de matches para un solo elemento $x$, retornando límites masivos usando sólo una superposición asintótica de $\mathcal{O}(\log n)$.
 
@@ -104,7 +104,7 @@ La búsqueda exponencial o \textit{crecimiento galopante} halla una delimitació
     \end{algorithmic}
 \end{algorithm}
 
-Posee implicaciones asombrosas a nivel temporal $\mathcal{O}(\log i)$ donde $i$ es el índice del elemento. Conviertiéndola en un faro excepcionalmente raudo en grandes bases de datos.
+Posee implicaciones a nivel temporal $\mathcal{O}(\log i)$, donde $i$ es el índice del elemento. Convirtiéndola en una opción especialmente rápida en grandes bases de datos.
 
 \subsubsection{Búsqueda por Interpolación}\label{sec:busqueda_interpolacion}
 Apoya su funcionalidad interpretando numéricamente el "valor" lógico a buscar intersecándolo en una recta analítica generada entre las fronteras.
@@ -156,7 +156,7 @@ Dado que se purga un lado de los datos de forma continua y nunca se ordena el 10
 
 
 \subsection{Resultados Experimentales}\label{sec:resultados_experimentales}
-Esta sección contrasta los hallazgos teóricos con simulaciones obtenidas en los datasets estructurados. El proceso se ejecuto con el \textit{smoke} del binario en modo no interactivo, generando tres conjuntos de datos (ordenado, invertido y aleatorio) de $N=25000$, ejecutando todas las ejecuciones en cadena y luego graficando con Python. Esta carga corresponde a la Fase 2 del informe, cuyo objetivo fue revisar el comportamiento empírico de los algoritmos bajo una batería completa de pruebas. Para rigor de una operación sin fallos de computo se decidió este sistema, realizandose secuencialmente las ejecuciones en un único hilo del procesador. La ejecucion completa tomo aproximadamente entre 40 minutos y 1 hora.
+Esta sección contrasta los hallazgos teóricos con simulaciones obtenidas en los datasets estructurados. El proceso se ejecutó con el \textit{smoke} del binario en modo no interactivo, generando tres conjuntos de datos (ordenado, invertido y aleatorio) de $N=25000$, encadenando todas las ejecuciones y luego graficando con Python. Esta carga corresponde a la Fase 2 del informe, cuyo objetivo fue revisar el comportamiento empírico de los algoritmos bajo una batería completa de pruebas. Para garantizar una operación sin fallos de cómputo se decidió ejecutar las pruebas de forma secuencial en un único hilo del procesador. La ejecución completa tomó aproximadamente entre 40 minutos y 1 hora.
 
 El estilo de ejecucion usado en \texttt{smoke.c} fue estrictamente secuencial, encadenando cada experimento y su escritura a CSV antes de iniciar el siguiente. Esta causalidad reduce solapamientos temporales y evita el agotamiento de recursos por concurrencia, garantizando estabilidad y trazabilidad en los resultados.
 
@@ -170,7 +170,7 @@ El entorno de ejecucion se resume a continuacion; la configuracion de hardware y
     \item Cache L3: \texttt{8 MiB}
 \end{enumerate}
 
-Las graficas se presentan en escala lineal; en varios casos las curvas se superponen porque los tiempos reales estan en el orden de microsegundos y el redondeo a $10^{-6}$ s hace que series distintas colapsen visualmente. Esta condicion se verifica en los CSV almacenados en el repositorio.
+Las graficas se presentan en escala lineal; en varios casos las curvas se superponen porque los tiempos reales estan en el orden de microsegundos y el redondeo a $10^{-6}$ s hace que series distintas colapsen visualmente. Esta condición se verifica en los CSV almacenados en el repositorio.
 
 \subsubsection{Ordenamiento: Mejor, Peor y Promedio}\label{sec:exp_ordenamiento}
 \vspace{0.3cm}
@@ -242,7 +242,7 @@ En ambos casos los tiempos quedan en el orden de $10^{-6}$ s y se solapan en la 
     \label{fig:seleccion_peor}
 \end{figure}
 
-Se observa crecimiento aproximadamente lineal en ambos casos, con un peor caso que aumenta mas rapido pero mantiene el rango microsegundo para $N \le 25000$, coherente con el costo promedio lineal y el peor caso cuadratico amortiguado por el tamano de entrada y el costo constante de la plataforma.
+Se observa crecimiento aproximadamente lineal en ambos casos, con un peor caso que aumenta más rápido pero mantiene el rango de microsegundos para $N \le 25000$, coherente con el costo promedio lineal y el peor caso cuadrático amortiguado por el tamaño de entrada y el costo constante de la plataforma.
 
 
 \subsection{Aplicación Práctica y Funcionalidades}\label{sec:aplicacion_practica}
@@ -289,7 +289,7 @@ El submenú especializado \textbf{Data Analytics \& Rankings} (opción 4 del men
         \item \textbf{Full Sort + Índice (complejidad $\mathcal{O}(n \log n)$):} Ordena el dataset y accede directamente al índice. Esta alternativa es prácticamente equivalente cuando K es pequeño y la constante de Quick Sort es prohibitiva.
     \end{itemize}
     
-    \item \textbf{Búsqueda por Rango de Puntajes (Search by Score Range):} Localiza todos los atletas cuyas puntuaciones caen dentro de un rango $[\text{minScore}, \text{maxScore}]$. La implementación ordena previamente el dataset por Score mediante Quick Sort (para agilizar la búsqueda subsequente) y luego itera de manera lineal a través del arreglo ordenado, recogiendo todos los elementos dentro del rango. Esto aprovecha la proximidad de elementos en el rango ordenado, exhibiendo eficiencia práctica por encima de búsquedas completamente ingenuitas.
+    \item \textbf{Búsqueda por Rango de Puntajes (Search by Score Range):} Localiza todos los atletas cuyas puntuaciones caen dentro de un rango $[\text{minScore}, \text{maxScore}]$. La implementación ordena previamente el dataset por Score mediante Quick Sort (para agilizar la búsqueda subsequente) y luego itera de manera lineal a través del arreglo ordenado, recogiendo todos los elementos dentro del rango. Esto aprovecha la proximidad de elementos en el rango ordenado, exhibiendo eficiencia práctica por encima de búsquedas completamente ingenuas.
     
     \item \textbf{Búsqueda por ID Exacto (Search Athlete by exact ID):} Localiza un atleta específico utilizando su identificador único. El programa carga el dataset y aplica una búsqueda lineal o bien Búsqueda Binaria si el dataset está previamente ordenado por ID. Esta consulta ejemplifica un caso de uso típico donde la complejidad $\mathcal{O}(\log n)$ binaria supera ampliamente el acceso naive de orden $\mathcal{O}(n)$.
 \end{enumerate}
