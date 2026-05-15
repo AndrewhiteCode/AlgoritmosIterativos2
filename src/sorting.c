@@ -258,7 +258,6 @@ void quick_sort_rec(Player V[], int low, int high, int pivot_type, int (*comp_f)
         quick_sort_rec(V, pi + 1, high, pivot_type, comp_f);
     }
 }
-
 /**
  * @brief Función principal de Quick Sort
  * @param pivot_type 1: Último, 2: Primero, 3: Aleatorio, 4: Mediana de tres

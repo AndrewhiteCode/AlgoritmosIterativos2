@@ -138,7 +138,7 @@ int exponential_search(Player V[], int n, Player *x) {
 
     // Encontrar rango para la búsqueda binaria mediante crecimiento exponencial
     int i = 1;
-    while (i < n && compare_id(&V[i], x) <= 0) {
+    while (i < n && compare_id(&V[i], x) < 0) {
         i = i * 2;
     }
 

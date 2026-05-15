@@ -15,7 +15,7 @@
  * @param target Algun parametro que puede ser necesario para el error
  * @param obs Algun texto que puede acompannar el error
  */
-void print_error(int num, char *target, char *obs)
+void print_error(int num, const char *target, const char *obs)
 {
 	if (num >= 100 && num < 200)
 	{
