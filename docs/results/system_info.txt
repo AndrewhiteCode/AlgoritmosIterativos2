@@ -14,7 +14,7 @@ Núcleo(s) por «socket»:                   4
 «Socket(s)»:                              1
 Revisión:                                 1
 Aumento de frecuencia:                    activada
-CPU(s) factor de escala MHz:              83%
+CPU(s) factor de escala MHz:              87%
 CPU MHz máx.:                             4250,9282
 CPU MHz mín.:                             409,7280
 BogoMIPS:                                 6388,15
