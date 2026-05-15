@@ -1,3 +1,4 @@
+#include "smoke.h"
 /**
  * @file main.c
  * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
@@ -46,7 +47,7 @@ int main() {
 	printf(DARK_GRAY"Choose an option: " RESET);
 	
 	check =	scanf("%d", &option);
-	while (check != 1 || option < 1 || option > 6) {
+	while (check != 1 || option < 1 || option > 7) {
 		printf(DARK_GRAY"Invalid option, try again: " RESET);
 		while (getchar() != '\n');
 		check = scanf("%d", &option);
@@ -316,10 +317,14 @@ int main() {
     }
 
 	else if (option == 5) { // Opcion 5: Ejecutar experimento
-		run_experiment();
+		// run_experiment();
+        run_threshold_experiment();
 	}
+    else if (option == 6) { 
+        run_smoke_tests(); 
+    }
 
-	else if (option == 6) { // Opcion 6: Salir del programa
+	else if (option == 7) { // Opcion 6: Salir del programa
 
 		// 1/2 de probablidad de salir crocodile o aligator
 		if (rand() % 2 == 0) {

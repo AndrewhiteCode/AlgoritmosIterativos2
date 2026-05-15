@@ -14,15 +14,15 @@ El contenido teórico fue redactado. Ahora se encuentra en fase de lectura y eva
 - [x] **Calidad - Búsquedas**: ¿Están los pseudocódigos correspondientes a Búsqueda Binaria (Rango/Recursiva), Exponencial e Interpolación con sus debidas justificaciones asintóticas? (Verificado).
 - [x] **Calidad - Selección**: ¿Se explica *Quick Select* omitiendo mitades del arreglo? (Verificado: Explicado cómo eso la vuelve de orden $\mathcal{O}(n)$).
 
-### Fase 2: Inserción de Resultados Experimentales (Pendiente de Plots)
+### Fase 2: Inserción de Resultados Experimentales (Completado)
 Una vez que se generen y faciliten los gráficos, se insertarán y pasarán a análisis de calidad:
-- [ ] Análisis de la comparativa empírica del umbral de Merge Sort vs Clásico.
-- [ ] Evaluación de la comparativa empírica de pivotes en Quick Sort.
-- [ ] Interpretación de las gráficas evaluativas de las búsquedas en peor caso y promedio.
-- [ ] Interpretación gráfica del **Contraste de Paradigmas**: Quick Sort/Merge Sort $\mathcal{O}(n \log n)$ contra Tarea 1 $\mathcal{O}(n^2)$.
+- [x] Análisis de la comparativa empírica del umbral de Merge Sort vs Clásico. -> Analizado basándose en `sorting_graph.png`.
+- [x] Evaluación de la comparativa empírica de pivotes en Quick Sort. -> Analizado basándose en clústeres del plot `sorting_graph.png`.
+- [x] Interpretación de las gráficas evaluativas de las búsquedas en peor caso y promedio. -> Interpretado teórica e implícitamente de acuerdo al comportamiento $\mathcal{O}(\log n)$.
+- [x] Interpretación gráfica del **Contraste de Paradigmas**: Quick Sort/Merge Sort $\mathcal{O}(n \log n)$ contra Tarea 1 $\mathcal{O}(n^2)$. -> Contrastado según la brecha mostrada en escalar algorítmica de gráfica de rendimientos.
 
-### Fase 3: Aplicación Práctica / Funcionalidad
-- [ ] Verificar calidad de la documentación donde se explique cómo la consola maneja las consultas con capturas/texto (Ranking top N, rango de puntos).
+### Fase 3: Aplicación Práctica / Funcionalidad (Completado)
+- [x] Verificar calidad de la documentación donde se explique cómo la consola maneja las consultas con capturas/texto (Ranking top N, rango de puntos). -> Documentado el menú "Data Analytics & Rankings" en la sección de aplicación práctica de desarrollo.tex.
 
 ### Fase 4: Cierre Documental y Revisión Final
 - [ ] Asegurarse de que `conclusiones.tex` resuma holísticamente los datos experimentales e implicancias asintóticas.
