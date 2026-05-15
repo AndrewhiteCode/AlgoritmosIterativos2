@@ -7,6 +7,23 @@
 #include "generator.h"
 
 static char *teams[] = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Theta", "Lambda", "Pi", "Tau"};
+static int generator_quiet = 0;
+
+static void format_size(size_t size, char *buf, size_t buf_size)
+{
+	const size_t one_kb = 1024;
+	const size_t one_mb = 1024 * 1024;
+
+	if (size >= one_mb) {
+		double mb = (double)size / (double)one_mb;
+		snprintf(buf, buf_size, "%.2f MB", mb);
+	} else if (size >= one_kb) {
+		double kb = (double)size / (double)one_kb;
+		snprintf(buf, buf_size, "%.2f KB", kb);
+	} else {
+		snprintf(buf, buf_size, "%lu B", (unsigned long)size);
+	}
+}
 
 /**
 * @brief Funcion para desordenar los jugadores (Fisher-Yates)
@@ -81,6 +98,11 @@ static void generate_player(int id, Player *player)
 	// Usted no vio nada aqui agente...
 }
 
+void set_generator_quiet(int quiet)
+{
+	generator_quiet = quiet ? 1 : 0;
+}
+
 /**
  * @brief Funcion general de generacion de csv con datos aleatorios 
  * 
@@ -102,14 +124,16 @@ int generate_csv(int n, int generationType)
 	// Reservamos memoria para los jugadores
 	size_t size = n * sizeof(Player);
 	char size_string[32];
-	sprintf(size_string, "%lu MB", (unsigned long)(size / 1024 / 1024));
+	format_size(size, size_string, sizeof(size_string));
 
 	if ((players = malloc(n * sizeof(Player))) == NULL) {
 		fclose(csv);
 		print_error(102, size_string, NULL);
 		return 102;
 	}
-	printf(BG_GREEN "%s De memoria reservados" RESET"\n", size_string);
+	if (!generator_quiet) {
+		printf(BG_GREEN "%s De memoria reservados" RESET"\n", size_string);
+	}
 
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &players[i]);
@@ -138,11 +162,15 @@ int generate_csv(int n, int generationType)
 		);
 	}
 
-	print_player_array_more(players, n);
+	if (!generator_quiet) {
+		print_player_array_more(players, n);
+	}
 
 	free(players);
 	fclose(csv);
-	printf("\n" BG_GREEN "Data generated and saved to build/db/players.csv" RESET "\n");
+	if (!generator_quiet) {
+		printf("\n" BG_GREEN "Data generated and saved to build/db/players.csv" RESET "\n");
+	}
 
 	return 0;
 }
@@ -176,7 +204,7 @@ Player* load_players(char* file, int* out_n)
 	// Reservar memoria
 	size_t size = (size_t)n * sizeof(Player);
 	char size_string[32];
-	sprintf(size_string, "%lu MB", (unsigned long)(size / 1024 / 1024));
+	format_size(size, size_string, sizeof(size_string));
 
 	playerArray = malloc(size);
 	if (playerArray == NULL) {
@@ -187,7 +215,9 @@ Player* load_players(char* file, int* out_n)
 	// Entonces mi punto comercial sonrio y 
 	// searching.h
 
-	printf("%s de memoria reservados\n", size_string);
+	if (!generator_quiet) {
+		printf("%s de memoria reservados\n", size_string);
+	}
 
 	// Leer cabecera
 	if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {

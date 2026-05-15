@@ -42,7 +42,8 @@ int main() {
 	printf("║ "DARK_BLUE "3)" LIGHT_BLUE " Sort CSV" RESET "                    ║\n");
 	printf("║ "DARK_GREEN "4)" LIGHT_GREEN " Search value in CSV" RESET "         ║\n");
 	printf("║ "PURPLE "5)" MAGENTA " Run experiment" RESET "              ║\n");
-	printf("║ "DARK_RED "6)" LIGHT_RED " Exit" RESET "                        ║\n");
+    printf("║ "DARK_RED "6)" LIGHT_RED " Run smoke + plots" RESET "         ║\n");
+    printf("║ "DARK_RED "7)" LIGHT_RED " Exit" RESET "                        ║\n");
 	printf("╚════════════════════════════════╝\n");
 	printf(DARK_GRAY"Choose an option: " RESET);
 	
@@ -316,15 +317,54 @@ int main() {
         free(players);
     }
 
-	else if (option == 5) { // Opcion 5: Ejecutar experimento
-		// run_experiment();
-        run_threshold_experiment();
-	}
+    else if (option == 5) { // Opcion 5: Ejecutar experimentos
+        int expOption = 0;
+
+        printf("\n" MAGENTA "   ╔══════════════════════════╗\n" RESET);
+        printf(MAGENTA "   ║" YELLOW "  Experiments menu      " MAGENTA "║\n" RESET);
+        printf(MAGENTA "   ╚══════════════════════════╝\n" RESET);
+        printf(MAGENTA "   ║" YELLOW " 1) Threshold (Merge)   " MAGENTA "║\n" RESET);
+        printf(MAGENTA "   ║" YELLOW " 2) Sorting (All cases) " MAGENTA "║\n" RESET);
+        printf(MAGENTA "   ║" YELLOW " 3) Searching (Cases)   " MAGENTA "║\n" RESET);
+        printf(MAGENTA "   ║" YELLOW " 4) Selection (Cases)   " MAGENTA "║\n" RESET);
+        printf(MAGENTA "   ║" YELLOW " 5) Run all             " MAGENTA "║\n" RESET);
+
+        printf(MAGENTA "Selection: " RESET);
+        check = scanf("%d", &expOption);
+        while (check != 1 || expOption < 1 || expOption > 5) {
+            printf(MAGENTA "Invalid option, try again: " RESET);
+            while (getchar() != '\n');
+            check = scanf("%d", &expOption);
+        }
+
+        if (expOption == 1 || expOption == 5) {
+            run_threshold_experiment();
+        }
+        if (expOption == 2 || expOption == 5) {
+            run_sort_experiments(
+                "build/db/players_sorted.csv",
+                "build/db/players_inverted.csv",
+                "build/db/players_shuffled.csv",
+                "build/db/ordenamiento"
+            );
+        }
+        if (expOption == 3 || expOption == 5) {
+            run_search_experiments("build/db/players_sorted.csv", "build/db/busqueda");
+        }
+        if (expOption == 4 || expOption == 5) {
+            run_select_experiments(
+                "build/db/players_sorted.csv",
+                "build/db/players_shuffled.csv",
+                "build/db/seleccion"
+            );
+        }
+    }
     else if (option == 6) { 
-        run_smoke_tests(); 
+        run_smoke_tests();
+        system("make plot");
     }
 
-	else if (option == 7) { // Opcion 6: Salir del programa
+    else if (option == 7) { // Opcion 7: Salir del programa
 
 		// 1/2 de probablidad de salir crocodile o aligator
 		if (rand() % 2 == 0) {

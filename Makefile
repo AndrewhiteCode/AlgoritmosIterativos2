@@ -49,6 +49,10 @@ install-allegro6:
 	@bash $(ALLEGRO6_INSTALLER)
 
 plot:
+	@mkdir -p docs/results
+	@for f in build/db/*_experiment.csv; do \
+		if [ -f $$f ]; then cp $$f docs/results/; fi; \
+	done
 	@if [ -x $(ALLEGRO6_VENV)/bin/python ]; then \
 		$(ALLEGRO6_VENV)/bin/python $(ALLEGRO6_PY); \
 	else \

@@ -11,6 +11,8 @@
 
 // Variable global o estática local para almacenar las flags activadas
 SortAlgorithmFlag current_active_flags = FLAG_ALL_SORTS;
+static int experiment_quiet = 0;
+static int experiment_show_samples = 1;
 
 /**
  * @brief Setea una flag única a partir de un arreglo de flags pre-seleccionadas
@@ -22,6 +24,16 @@ void set_active_sort_flags(SortAlgorithmFlag* active_flags, SortAlgorithmFlag se
         *active_flags |= selected_flags[i];
         i++;
     }
+}
+
+void set_experiment_quiet(int quiet)
+{
+	experiment_quiet = quiet ? 1 : 0;
+}
+
+void set_experiment_show_samples(int show_samples)
+{
+	experiment_show_samples = show_samples ? 1 : 0;
 }
 
 /**
@@ -37,7 +49,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 			return;
 	}
 	printf("Arreglo de jugadores cargado desde %s\n", target_file);
-	print_player_array(players, n);
+	if (!experiment_quiet && experiment_show_samples) {
+		print_player_array(players, n);
+	}
 
 	const int num_points = NUM_STEPS;
 	
@@ -69,13 +83,17 @@ void run_experiment(const char* target_file, const char* out_filename)
 	fprintf(csv, "N,Swap Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Merge Sort Classic,Merge Sort Opt(16),Merge Sort Opt(50),Quick Sort (Last),Quick Sort (Random),Quick Sort (Median)\n");
 
 	// header
-	printf(PURPLE "╔══════════════════════════════════════════════════════╗\n");
+	if (!experiment_quiet) {
+		printf(PURPLE "╔══════════════════════════════════════════════════════╗\n");
+	}
 
 	for (int s = 0; s < num_points; s++) {
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		printf(PURPLE "║" MAGENTA " Procesando n =" WHITE" %8d" PURPLE "                             ║\n", k);
-		printf(PURPLE "║" MAGENTA " Paso:" WHITE" %4d/%4d" PURPLE "                                     ║\n", s+1, num_points);
+		if (!experiment_quiet) {
+			printf(PURPLE "║" MAGENTA " Procesando n =" WHITE" %8d" PURPLE "                             ║\n", k);
+			printf(PURPLE "║" MAGENTA " Paso:" WHITE" %4d/%4d" PURPLE "                                     ║\n", s+1, num_points);
+		}
 		clock_t start, end;
 
 		// --- Tiempos Swap Sort ---
@@ -87,7 +105,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tSwap += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tSwap /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_BLUE "\tSwap Sort:             " WHITE " %f\t" PURPLE "       ║\n", tSwap);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_BLUE "\tSwap Sort:             " WHITE " %f\t" PURPLE "       ║\n", tSwap);
+			}
 		}
  
 		// --- Tiempos Insertion Sort ---
@@ -99,7 +119,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tIns += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tIns /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_BLUE "\tInsertion Sort:        " WHITE " %f\t" PURPLE "       ║\n", tIns);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_BLUE "\tInsertion Sort:        " WHITE " %f\t" PURPLE "       ║\n", tIns);
+			}
 		}
 		
 		// --- Tiempos Selection Sort ---
@@ -111,7 +133,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tSel += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tSel /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_BLUE "\tSelection Sort:        " WHITE " %f\t" PURPLE "       ║\n", tSel);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_BLUE "\tSelection Sort:        " WHITE " %f\t" PURPLE "       ║\n", tSel);
+			}
 		}
 
 		// --- Tiempos Cocktail Shaker Sort ---
@@ -123,7 +147,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tCock += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tCock /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_BLUE "\tCocktail Shaker Sort:  " WHITE " %f" PURPLE "         ║\n", tCock);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_BLUE "\tCocktail Shaker Sort:  " WHITE " %f" PURPLE "         ║\n", tCock);
+			}
 		}
 
         // --- Tiempos Merge Sort Classic ---
@@ -135,7 +161,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tMergeClas += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tMergeClas /= NUM_TRIALS;
-			printf(PURPLE "║" YELLOW "\tMerge Sort Classic:    " WHITE " %f" PURPLE "         ║\n", tMergeClas);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" YELLOW "\tMerge Sort Classic:    " WHITE " %f" PURPLE "         ║\n", tMergeClas);
+			}
 		}
 
         // --- Tiempos Merge Sort Opt(16) ---
@@ -147,7 +175,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tMerge10 += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tMerge10 /= NUM_TRIALS;
-			printf(PURPLE "║" YELLOW "\tMerge Sort Opt(16):    " WHITE " %f" PURPLE "         ║\n", tMerge10);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" YELLOW "\tMerge Sort Opt(16):    " WHITE " %f" PURPLE "         ║\n", tMerge10);
+			}
 		}
 
         // --- Tiempos Merge Sort Opt(50) ---
@@ -159,7 +189,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tMerge50 += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tMerge50 /= NUM_TRIALS;
-			printf(PURPLE "║" YELLOW "\tMerge Sort Opt(50):    " WHITE " %f" PURPLE "         ║\n", tMerge50);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" YELLOW "\tMerge Sort Opt(50):    " WHITE " %f" PURPLE "         ║\n", tMerge50);
+			}
 		}
 
         // --- Tiempos Quick Sort (Last) ---
@@ -171,7 +203,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tQuickLast += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tQuickLast /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Last):     " WHITE " %f" PURPLE "         ║\n", tQuickLast);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Last):     " WHITE " %f" PURPLE "         ║\n", tQuickLast);
+			}
 		}
 
         // --- Tiempos Quick Sort (Random) ---
@@ -183,7 +217,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tQuickRand += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tQuickRand /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Random):   " WHITE " %f" PURPLE "         ║\n", tQuickRand);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Random):   " WHITE " %f" PURPLE "         ║\n", tQuickRand);
+			}
 		}
 
         // --- Tiempos Quick Sort (Median) ---
@@ -195,7 +231,9 @@ void run_experiment(const char* target_file, const char* out_filename)
 				tQuickMed += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			tQuickMed /= NUM_TRIALS;
-			printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Median):   " WHITE " %f" PURPLE "         ║\n", tQuickMed);
+			if (!experiment_quiet) {
+				printf(PURPLE "║" LIGHT_GREEN "\tQuick Sort (Median):   " WHITE " %f" PURPLE "         ║\n", tQuickMed);
+			}
 		}
 
 
@@ -204,14 +242,20 @@ void run_experiment(const char* target_file, const char* out_filename)
 				"%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
 				k, tSwap, tIns, tSel, tCock, tMergeClas, tMerge10, tMerge50, tQuickLast, tQuickRand, tQuickMed
 			);        
-		printf(PURPLE "╠══════════════════════════════════════════════════════╣\n");
+		if (!experiment_quiet) {
+			printf(PURPLE "╠══════════════════════════════════════════════════════╣\n");
+		}
 	}
 	// end of table
-	printf(PURPLE "║" LIGHT_GREEN "                  CSV Data written                    " PURPLE "║\n");
-	printf(PURPLE "╚══════════════════════════════════════════════════════╝\n" RESET);
+	if (!experiment_quiet) {
+		printf(PURPLE "║" LIGHT_GREEN "                  CSV Data written                    " PURPLE "║\n");
+		printf(PURPLE "╚══════════════════════════════════════════════════════╝\n" RESET);
+	}
 	fclose(csv);
 
-	printf("\n" BG_GREEN "Data saved in %s" RESET "\n", out_filename);
+	if (!experiment_quiet) {
+		printf("\n" BG_GREEN "Data saved in %s" RESET "\n", out_filename);
+	}
 
 	free(players);
 	free(swapSortP); free(insertionSortP); free(selectionSortP); free(cocktailP);
@@ -226,7 +270,9 @@ void run_threshold_experiment()
     if ((players = load_players("build/db/players.csv", &n)) == NULL) {
         return;
     }
-    printf("Arreglo de jugadores cargado\n");
+	if (!experiment_quiet) {
+		printf("Arreglo de jugadores cargado\n");
+	}
 
     const int num_points = NUM_STEPS;
 
@@ -254,13 +300,17 @@ void run_threshold_experiment()
 
     fprintf(csv, "N,Merge Sort T(2),Merge Sort T(8),Merge Sort T(16),Merge Sort T(32),Merge Sort T(64),Merge Sort T(128)\n");
 
-    printf(PURPLE "╔══════════════════════════════════════════════════════╗\n");
+	if (!experiment_quiet) {
+		printf(PURPLE "╔══════════════════════════════════════════════════════╗\n");
+	}
 
     for (int s = 0; s < num_points; s++) {
         int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-        printf(PURPLE "║" MAGENTA " Procesando n =" WHITE " %8d" PURPLE "                             ║\n", k);
-        printf(PURPLE "║" MAGENTA " Paso:" WHITE " %4d/%4d" PURPLE "                                     ║\n", s+1, num_points);
+		if (!experiment_quiet) {
+			printf(PURPLE "║" MAGENTA " Procesando n =" WHITE " %8d" PURPLE "                             ║\n", k);
+			printf(PURPLE "║" MAGENTA " Paso:" WHITE " %4d/%4d" PURPLE "                                     ║\n", s+1, num_points);
+		}
 
         fprintf(csv, "%d", k);
 
@@ -277,21 +327,29 @@ void run_threshold_experiment()
             }
             tMerge /= NUM_TRIALS;
 
-            printf(PURPLE "║" YELLOW "\tMerge Sort T(%3d):     " WHITE " %f" PURPLE "         ║\n",
-                   thresholds[t], tMerge);
+			     if (!experiment_quiet) {
+				  printf(PURPLE "║" YELLOW "\tMerge Sort T(%3d):     " WHITE " %f" PURPLE "         ║\n",
+					  thresholds[t], tMerge);
+			     }
 
             fprintf(csv, ",%f", tMerge);
         }
 
         fprintf(csv, "\n");
-        printf(PURPLE "╠══════════════════════════════════════════════════════╣\n");
+		if (!experiment_quiet) {
+			printf(PURPLE "╠══════════════════════════════════════════════════════╣\n");
+		}
     }
 
-    printf(PURPLE "║" LIGHT_GREEN "                  CSV Data written                    " PURPLE "║\n");
-    printf(PURPLE "╚══════════════════════════════════════════════════════╝\n" RESET);
+	if (!experiment_quiet) {
+		printf(PURPLE "║" LIGHT_GREEN "                  CSV Data written                    " PURPLE "║\n");
+		printf(PURPLE "╚══════════════════════════════════════════════════════╝\n" RESET);
+	}
     fclose(csv);
 
-    printf("\n" BG_GREEN "Data saved in build/db/threshold_experiment.csv" RESET "\n");
+	if (!experiment_quiet) {
+		printf("\n" BG_GREEN "Data saved in build/db/threshold_experiment.csv" RESET "\n");
+	}
 
     free(players);
     for (int t = 0; t < num_thresholds; t++) free(mergeP[t]);
@@ -304,7 +362,9 @@ void run_search_experiment(const char* target_file, const char* out_filename, in
 	if ((players = load_players((char*)target_file, &n)) == NULL) {
 		return;
 	}
-	printf("Arreglo de jugadores cargado desde %s para busqueda\n", target_file);
+	if (!experiment_quiet) {
+		printf("Arreglo de jugadores cargado desde %s para busqueda\n", target_file);
+	}
 
 	const int num_points = NUM_STEPS;
 	FILE *csv = fopen(out_filename, "w");
@@ -353,7 +413,9 @@ void run_search_experiment(const char* target_file, const char* out_filename, in
 	}
 	fclose(csv);
 	free(players);
-	printf("Search experiment saved in %s\n", out_filename);
+	if (!experiment_quiet) {
+		printf("Search experiment saved in %s\n", out_filename);
+	}
 }
 
 void run_select_experiment(const char* target_file, const char* out_filename, int is_worst_case)
@@ -390,5 +452,43 @@ void run_select_experiment(const char* target_file, const char* out_filename, in
 	fclose(csv);
 	free(players);
 	free(arr);
-	printf("Select experiment saved in %s\n", out_filename);
+	if (!experiment_quiet) {
+		printf("Select experiment saved in %s\n", out_filename);
+	}
+}
+
+void run_sort_experiments(const char* sorted_file, const char* inverted_file, const char* shuffled_file, const char* out_prefix)
+{
+	char out_file[256];
+
+	snprintf(out_file, sizeof(out_file), "%s_mejor_experiment.csv", out_prefix);
+	run_experiment(sorted_file, out_file);
+
+	snprintf(out_file, sizeof(out_file), "%s_peor_experiment.csv", out_prefix);
+	run_experiment(inverted_file, out_file);
+
+	snprintf(out_file, sizeof(out_file), "%s_promedio_experiment.csv", out_prefix);
+	run_experiment(shuffled_file, out_file);
+}
+
+void run_search_experiments(const char* sorted_file, const char* out_prefix)
+{
+	char out_file[256];
+
+	snprintf(out_file, sizeof(out_file), "%s_promedio_experiment.csv", out_prefix);
+	run_search_experiment(sorted_file, out_file, 0);
+
+	snprintf(out_file, sizeof(out_file), "%s_peor_experiment.csv", out_prefix);
+	run_search_experiment(sorted_file, out_file, 1);
+}
+
+void run_select_experiments(const char* sorted_file, const char* shuffled_file, const char* out_prefix)
+{
+	char out_file[256];
+
+	snprintf(out_file, sizeof(out_file), "%s_mejor_experiment.csv", out_prefix);
+	run_select_experiment(shuffled_file, out_file, 0);
+
+	snprintf(out_file, sizeof(out_file), "%s_peor_experiment.csv", out_prefix);
+	run_select_experiment(sorted_file, out_file, 1);
 }

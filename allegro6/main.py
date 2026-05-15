@@ -22,7 +22,7 @@ color_map = {
     'Selection Sort': 'tab:green',
     'Cocktail Shaker Sort': 'tab:red',
     'Merge Sort Classic': 'tab:purple',
-    'Merge Sort Opt(10)': 'tab:brown',
+    'Merge Sort Opt(16)': 'tab:brown',
     'Merge Sort Opt(50)': 'tab:pink',
     'Quick Sort (Last)': 'tab:gray',
     'Quick Sort (Random)': 'tab:olive',
@@ -47,7 +47,7 @@ for filepath in csv_files:
     plt.title(f"Comparacion de Algoritmos - {name_no_ext}")
     plt.xlabel('N')
     plt.ylabel('Tiempo (s)')
-    plt.yscale('log')
+    # Escala lineal solicitada
     plt.grid(True)
     plt.legend()
     plt.tight_layout()

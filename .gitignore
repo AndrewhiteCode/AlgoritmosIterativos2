@@ -2,8 +2,7 @@
 *.o
 /.vscode/
 *.exe
-*.csv
-/build/
+/build/*.o
 /obj/
 /.dist/
 allegro6/.venv/

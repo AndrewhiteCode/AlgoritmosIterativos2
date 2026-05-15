@@ -50,9 +50,14 @@ typedef enum {
 } SortAlgorithmFlag;
 
 void set_active_sort_flags(SortAlgorithmFlag* active_flags, SortAlgorithmFlag selected_flags[]);
+void set_experiment_quiet(int quiet);
+void set_experiment_show_samples(int show_samples);
 void run_threshold_experiment(void);
 void run_experiment(const char* target_file, const char* out_filename);
-
-#endif
 void run_search_experiment(const char* target_file, const char* out_filename, int is_worst_case);
 void run_select_experiment(const char* target_file, const char* out_filename, int is_worst_case);
+void run_sort_experiments(const char* sorted_file, const char* inverted_file, const char* shuffled_file, const char* out_prefix);
+void run_search_experiments(const char* sorted_file, const char* out_prefix);
+void run_select_experiments(const char* sorted_file, const char* shuffled_file, const char* out_prefix);
+
+#endif
