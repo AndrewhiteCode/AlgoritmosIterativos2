@@ -12,49 +12,110 @@ La validación de la Fase 3 se ejecutó con un tamaño de prueba de $N=1000$ ele
 \end{itemize}
 
 \subsection{Código base de partición}
-\begin{lstlisting}[language=C, caption={Esquema de partición Lomuto empleado como base en Quick Sort y Quick Select}, label={lst:lomuto}, style=CodeStyle]
-/**
- * @brief Esquema de particion de Lomuto
- */
-static int lomuto_partition(Player V[], int low, int high, int pivot_type, int (*comp_f)(Player *, Player *)) {
-    int p_idx = select_pivot_index(V, low, high, pivot_type, comp_f);
-    Player pivot = V[high];
-    
-    int i = low - 1;
-    for (int j = low; j < high; j++) {
-        if (comp_f(&V[j], &pivot) <= 0) {
-            i++;
-            swap_player(&V[i], &V[j]);
-        }
-    }
-    swap_player(&V[i + 1], &V[high]);
-    return i + 1;
-}
-\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\caption{Esquema de partición Lomuto empleado como base en Quick Sort y Quick Select}
+\label{lst:lomuto}
+\begin{tabular}{|p{\dimexpr\linewidth-2\tabcolsep-2\arrayrulewidth\relax}|}
+\hline
+\texttt{\small /**} \\
+\hline
+\texttt{\small  * @brief Esquema de particion de Lomuto} \\
+\hline
+\texttt{\small  */} \\
+\hline
+\texttt{\small static int lomuto\_partition(Player V[], int low, int high,} \\
+\hline
+\texttt{\small \phantom{xx}int pivot\_type, int (*comp\_f)(Player *, Player *)) \{} \\
+\hline
+\texttt{\small \phantom{xxxx}int p\_idx = select\_pivot\_index(V, low, high,} \\
+\hline
+\texttt{\small \phantom{xxxxxxxxxxxx}pivot\_type, comp\_f);} \\
+\hline
+\texttt{\small \phantom{xxxx}Player pivot = V[high];} \\
+\hline
+\texttt{\small \phantom{xxxx}int i = low - 1;} \\
+\hline
+\texttt{\small \phantom{xxxx}for (int j = low; j < high; j++) \{} \\
+\hline
+\texttt{\small \phantom{xxxxxxxx}if (comp\_f(\&V[j], \&pivot) <= 0) \{} \\
+\hline
+\texttt{\small \phantom{xxxxxxxxxxxx}i++;} \\
+\hline
+\texttt{\small \phantom{xxxxxxxxxxxx}swap\_player(\&V[i], \&V[j]);} \\
+\hline
+\texttt{\small \phantom{xxxxxxxx}\}} \\
+\hline
+\texttt{\small \phantom{xxxx}\}} \\
+\hline
+\texttt{\small \phantom{xxxx}swap\_player(\&V[i + 1], \&V[high]);} \\
+\hline
+\texttt{\small \phantom{xxxx}return i + 1;} \\
+\hline
+\texttt{\small \}} \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Extractos del registro de ejecución}\label{sec:anexos_log}
 A continuación se incluyen extractos relevantes de `log.txt` que documentan la compilación, advertencias y el desarrollo de la Fase 3 (tests con $N=1000$). Estos fragmentos soportan la trazabilidad del proceso descrito en la sección de validación operativa.
 
-\begin{verbatim}
-gcc -Wall -Wextra -Wpedantic -g -c -o obj/generate_exec_times.o src/generate_exec_times.c -I./incs/
-src/generate_exec_times.c: In function ‘run_experiment’:
-src/generate_exec_times.c:78:34: warning: passing argument 2 of ‘print_error’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
-   78 |                 print_error(101, out_filename, NULL);
-gcc -Wall -Wextra -Wpedantic -g -o build/player.out obj/errors.o obj/generate_exec_times.o obj/generator.o obj/main.o obj/player.o obj/searching.o obj/smoke.o obj/sorting.o -I./incs/ -lm
 
-=== FASE 3: PRUEBAS DE FUNCIONALIDADES CON 1000 ELEMENTOS ===
-Fecha: vie 15 may 2026 10:15:12 -03
+\begin{table}[H]
+\centering
+\caption{Registro técnico de compilación y ejecución (Fase 3, N=1000)}
+\label{tab:log_excerpt}
+\begin{tabular}{|p{\dimexpr\linewidth-2\tabcolsep-2\arrayrulewidth\relax}|}
+\hline
+\texttt{\footnotesize gcc -Wall -Wextra -Wpedantic -g -c -o obj/generate\_exec\_times.o src/generate\_exec\_times.c -I./incs/} \\
+\hline
+\texttt{\footnotesize src/generate\_exec\_times.c: In function `run\_experiment':} \\
+\hline
+\texttt{\footnotesize src/generate\_exec\_times.c:78:34: warning: passing argument 2 of `print\_error'} \\
+\hline
+\texttt{\footnotesize discards `const' qualifier from pointer target type [-Wdiscarded-qualifiers]} \\
+\hline
+\texttt{\footnotesize \phantom{xx}78 | print\_error(101, out\_filename, NULL);} \\
+\hline
+\texttt{\footnotesize gcc -Wall -Wextra -Wpedantic -g -o build/player.out obj/errors.o} \\
+\hline
+\texttt{\footnotesize obj/generate\_exec\_times.o obj/generator.o obj/main.o obj/player.o} \\
+\hline
+\texttt{\footnotesize obj/searching.o obj/smoke.o obj/sorting.o -I./incs/ -lm} \\
+\hline
+\texttt{\footnotesize } \\
+\hline
+\texttt{\footnotesize === FASE 3: PRUEBAS DE FUNCIONALIDADES CON 1000 ELEMENTOS ===} \\
+\hline
+\texttt{\footnotesize Fecha: vie 15 may 2026 10:15:12 -03} \\
+\hline
+\texttt{\footnotesize } \\
+\hline
+\texttt{\footnotesize === TEST 1: Generar CSV con 1000 elementos (Sorted) ===} \\
+\hline
+\texttt{\footnotesize Generating SORTED array...} \\
+\hline
+\texttt{\footnotesize 39.06 KB De memoria reservados} \\
+\hline
+\texttt{\footnotesize -- muestra de salida tabular paginada (IDs 1..25) --} \\
+\hline
+\texttt{\footnotesize } \\
+\hline
+\texttt{\footnotesize === TEST 2: Generar CSV con 1000 elementos (Inverse) ===} \\
+\hline
+\texttt{\footnotesize Generating INVERSE array...} \\
+\hline
+\texttt{\footnotesize 39.06 KB De memoria reservados} \\
+\hline
+\texttt{\footnotesize -- muestra de salida tabular paginada (IDs 1000..976) --} \\
+\hline
+\texttt{\footnotesize } \\
+\hline
+\texttt{\footnotesize === TEST 3: Generar CSV con 1000 elementos (Shuffled) ===} \\
+\hline
+\texttt{\footnotesize -- procedimiento análogo al anterior, confirmando consistencia --} \\
+\hline
+\end{tabular}
+\end{table}
 
-=== TEST 1: Generar CSV con 1000 elementos (Sorted) ===
-Generating SORTED array...
-39.06 KB De memoria reservados
--- muestra de salida tabular paginada (IDs 1..25) --
-
-=== TEST 2: Generar CSV con 1000 elementos (Inverse) ===
-Generating INVERSE array...
-39.06 KB De memoria reservados
--- muestra de salida tabular paginada (IDs 1000..976) --
-
-=== TEST 3: Generar CSV con 1000 elementos (Shuffled) ===
--- procedimiento análogo al anterior, confirmando consistencia en el pipeline --
-\end{verbatim}
