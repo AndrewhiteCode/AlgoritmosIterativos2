@@ -1,38 +1,29 @@
-# Plan de Gestión: Informe vs Código C (Proyecto 2: Divide y Vencerás)
+# Análisis de Calidad de Contenido y Plan de Gestión (Proyecto 2: Divide y Vencerás)
 
-## Estado actual
-Tras la reestructuración inicial del documento LaTeX, el estado es el siguiente:
-
-### 1. Código C (Completo ✓)
-El código cumple íntegramente con los requerimientos técnicos del Proyecto 2:
-- **Ordenamiento:** Implementado `merge_sort_classic` y `merge_sort_optimized` (con umbral). Implementado `quick_sort` (Lomuto) y 4 variantes de pivote.
-- **Búsqueda:** `binary_search_recursive`, `binary_search_range`, `exponential_search` e `interpolation_search`.
-- **Selección:** `quick_select`.
-
-### 2. Informe (Estructura formal lista ✓ / Contenido en progreso)
-Se limpió el rastro de la Tarea 1. Los archivos `introduccion.tex`, `objetivos.tex`, `conclusiones.tex`, `anexos.tex`, `Informe.tex` y `desarrollo.tex` ya poseen el contexto, abstract y apartados exclusivos de *Divide y Vencerás*. Sin embargo, **las secciones se encuentran con placeholders (textos temporales)** a la espera de ser rellenadas.
+## Estado actual general
+La estructura base del informe en LaTeX y el entorno del código en C están completamente alineados con los requerimientos técnicos de la asignatura. A medida que las diferentes secciones van siendo asistidas y redactadas, este documento transacciona de una lista de "Remanentes" hacia una bitácora de **Análisis de Calidad de Contenido**.
 
 ---
 
-## Tareas Pendientes (Remanentes)
+## Fases de Calidad y Tareas Pendientes
 
-### Paso 1: Análisis Teórico (Pseudocódigos y Complejidad)
-Requiere redactar en LaTeX las fórmulas matemáticas, tablas de costo y algoritmos de:
-- [ ] **Merge Sort**: Clásico y análisis de la justificación matemática del umbral vs Insertion Sort.
-- [ ] **Quick Sort**: Análisis de complejidad de sus 4 heurísticas de pivote (Mejor, peor y promedio).
-- [ ] **Búsquedas**: Binaria (recursiva y rango), Exponencial y por Interpolación. 
-- [ ] **Selección**: Quick Select (Mejor y peor caso).
+### Fase 1: Análisis de Calidad del Contenido Teórico (Completado y en Revisión)
+El contenido teórico fue redactado. Ahora se encuentra en fase de lectura y evaluación de calidad:
+- [x] **Calidad - Merge Sort**: ¿Contiene el pseudocódigo clásico? ¿Se justifica matemáticamente la mejora empírica del umbral con *Insertion Sort*? (Verificado: Complejidad y Teorema Maestro presentes).
+- [x] **Calidad - Quick Sort**: ¿Se detalla la partición de Lomuto? ¿Están claras las 4 heurísticas de pivote y sus implicancias en el paso de $\mathcal{O}(n \log n)$ hacia el $\mathcal{O}(n^2)$ del peor caso? (Verificado: Explicado explícitamente en el desarrollo).
+- [x] **Calidad - Búsquedas**: ¿Están los pseudocódigos correspondientes a Búsqueda Binaria (Rango/Recursiva), Exponencial e Interpolación con sus debidas justificaciones asintóticas? (Verificado).
+- [x] **Calidad - Selección**: ¿Se explica *Quick Select* omitiendo mitades del arreglo? (Verificado: Explicado cómo eso la vuelve de orden $\mathcal{O}(n)$).
 
-### Paso 2: Resultados Experimentales (Esperando Plots)
-Una vez que se generen los gráficos, insertarlos y comentarlos:
-- [ ] Comparativa empírica del umbral de Merge Sort vs Clásico.
-- [ ] Comparativa empírica de pivotes en Quick Sort.
-- [ ] Gráficos evaluativos de las búsquedas en peor caso y promedio.
-- [ ] **Contraste de Paradigmas**: Comparación del rendimiento de Quick Sort/Merge Sort $\mathcal{O}(n \log n)$ contra los algoritmos previos de la Tarea 1 $\mathcal{O}(n^2)$.
+### Fase 2: Inserción de Resultados Experimentales (Pendiente de Plots)
+Una vez que se generen y faciliten los gráficos, se insertarán y pasarán a análisis de calidad:
+- [ ] Análisis de la comparativa empírica del umbral de Merge Sort vs Clásico.
+- [ ] Evaluación de la comparativa empírica de pivotes en Quick Sort.
+- [ ] Interpretación de las gráficas evaluativas de las búsquedas en peor caso y promedio.
+- [ ] Interpretación gráfica del **Contraste de Paradigmas**: Quick Sort/Merge Sort $\mathcal{O}(n \log n)$ contra Tarea 1 $\mathcal{O}(n^2)$.
 
-### Paso 3: Aplicación Práctica / Funcionalidad
-- [ ] Describir con capturas/texto cómo la consola del sistema implementa las funciones de ranking N, límite de rangos, y ordenamiento local.
+### Fase 3: Aplicación Práctica / Funcionalidad
+- [ ] Verificar calidad de la documentación donde se explique cómo la consola maneja las consultas con capturas/texto (Ranking top N, rango de puntos).
 
-### Paso 4: Cierre Documental
-- [ ] Rellenar los párrafos pre-estructurados de `conclusiones.tex` basados en lo que digan los gráficos experimentales.
-- [ ] Actualizar archivos de contribución de equipo (`contribucion_{andres, diego, emmanuel}.tex`).
+### Fase 4: Cierre Documental y Revisión Final
+- [ ] Asegurarse de que `conclusiones.tex` resuma holísticamente los datos experimentales e implicancias asintóticas.
+- [ ] Validar gramática y estructura en archivos de contribución de equipo (`contribucion_{andres, diego, emmanuel}.tex`).

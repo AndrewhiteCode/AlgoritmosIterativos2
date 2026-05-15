@@ -4,41 +4,154 @@
 En esta sección se detallan los algoritmos de ordenamiento implementados bajo el paradigma de \textit{Divide y Vencerás}. Se analizará su funcionamiento de manera teórica, desglosando sus pseudocódigos y estudiando su complejidad asintótica global.
 
 \subsubsection{Merge Sort: Clásico y Optimizado}\label{sec:merge_sort}
-El algoritmo Merge Sort basa su funcionamiento en dividir el arreglo por la mitad repetidamente hasta obtener arreglos de un solo elemento, para luego fusionarlos (merge) de manera ordenada.
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo, la explicación teórica y el análisis de la optimización del umbral combinando con Insertion Sort].}
+El algoritmo Merge Sort basa su funcionamiento en dividir el arreglo por la mitad repetidamente hasta obtener sub-arreglos de un solo elemento, para luego fusionarlos (operación \textit{merge}) de manera ordenada.
+
+\begin{algorithm}[H]
+    \caption{Merge Sort Clásico $\triangleright$ $V[beg..end]$}
+    \begin{algorithmic}[1]
+        \Procedure{MergeSort}{$V, beg, end$}
+        \If{$beg < end$}
+            \State $m \gets beg + \lfloor \frac{end-beg}{2} \rfloor$
+            \State \Call{MergeSort}{$V, beg, m$}
+            \State \Call{MergeSort}{$V, m+1, end$}
+            \State \Call{Merge}{$V, beg, m, end$}
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\textbf{Análisis de Complejidad:}
+Merge Sort siempre divide el arreglo en dos mitades, tomando tiempo constante $\mathcal{O}(1)$. La función \textsc{Merge} combina dos sub-arreglos transicionando todos sus $n$ elementos, lo cual toma $\mathcal{O}(n)$.
+La relación de recurrencia aplicable es:
+\[ T(n) = 2T(n/2) + \mathcal{O}(n) \]
+Por el Teorema Maestro, esto siempre resulta en una complejidad temporal constante de $\mathcal{O}(n \log n)$ en el mejor, peor y caso promedio.
+
+\textbf{Variante Optimizada con Umbral (Threshold):}
+Al delegar excesivamente al sistema la creación de árboles recursivos inmensos de llamadas y arreglos subyacentes mínimos, se penaliza el rendimiento. Algoritmos de orden cuadrático como \textit{Insertion Sort} poseen gastos constantes diminutos para entradas limitadas. La variante optimizada introduce un límite de recursión (\textit{UMBRAL} o \textit{threshold}); si el tamaño de un sub-arreglo alcanza un $n \le \text{Threshold}$, se corta la fragmentación y se despacha a la rutina de Insertion Sort, mejorando notamblemente los tiempos empíricos a pesar de mantener su categoría perimetral $\mathcal{O}(n \log n)$.
 
 \subsubsection{Quick Sort y sus Variantes de Pivote}\label{sec:quick_sort}
-Quick Sort selecciona un elemento como pivote y particiona el arreglo (en este caso implementado según el esquema de partición de Lomuto), ubicando los elementos menores a su izquierda y los mayores a su derecha, para luego procesar los sub-arreglos recursivamente.
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo, la explicación de las 4 heurísticas de selección de pivote (Último, Primero, Aleatorio, Mediana de tres) y el análisis de su impacto en el mejor, peor y caso promedio].}
+Quick Sort selecciona un elemento referencial o \textit{pivote} y particiona el arreglo utilizando el esquema de partición original de \textbf{Lomuto}. Todos los datos menores que el pivote recaen iterativamente a su lado izquierdo, mientras que los remanentes se asientan a su derecha. Finalmente, propaga sus llamadas lógicas separadamente.
+
+\begin{algorithm}[H]
+    \caption{Quick Sort Recursivo $\triangleright$ Basado en partición de Lomuto}
+    \begin{algorithmic}[1]
+        \Procedure{QuickSort}{$V, low, high$}
+        \If{$low < high$}
+            \State $p \gets$ \Call{LomutoPartition}{$V, low, high$}
+            \State \Call{QuickSort}{$V, low, p-1$}
+            \State \Call{QuickSort}{$V, p+1, high$}
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Dependiendo de cómo se selecciona el pivote antes de particionar, el algoritmo lidia diferentemente con las anomalías de los datos (como conjuntos ya previamente ordenados). Se implementaron 4 directrices:
+\begin{itemize}
+    \item \textbf{Último o Primer elemento:} Determinista e inherentemente veloz, pero susceptible y frágil frente a datos ya estructurados.
+    \item \textbf{Elemento Aleatorio:} Invoca a los temporizadores nativos en cada paso para elegir el límite. Es probabilísticamente resiliente al \textit{Peor Caso}.
+    \item \textbf{Mediana de tres:} Escoge matemáticamente la mediana entre el primer, el central y el último elemento; aislando de forma consistente las desviaciones extremistas.
+\end{itemize}
+
+\textbf{Análisis de Complejidad Global:}
+\begin{itemize}
+    \item \textbf{Mejor y Caso Promedio $\mathcal{O}(n \log n)$:} Estructura el árbol recursivo de forma simétrica si el pivote divide permanentemente el arreglo en dos particiones proporcionales.
+    \item \textbf{Peor Caso $\mathcal{O}(n^2)$:} Ocurre si el esquema particional selecciona ininterrumpidamente un máximo o mínimo. (ej., Pivote del último elemento en arreglos totalmente ordenados).
+\end{itemize}
 
 
 \subsection{Análisis Teórico de Algoritmos de Búsqueda}\label{sec:busqueda_dv}
-A los algoritmos clásicos de la primera iteración del proyecto se ha sumado un conjunto de algoritmos de búsqueda basados en reducir progresiva o logarítmicamente el espacio restante.
 
 \subsubsection{Búsqueda Binaria: Recursiva y por Rango}\label{sec:busqueda_binaria_rango}
-Basada en evaluar permanentemente el valor medio de un sector de estudio asumiendo arreglos ya ordenados, la versión recursiva delega el ciclo a la pila del sistema. Su extensión natural permite no solo atinar a un elemento sino determinar el límite inferior y superior de múltiples coincidencias de este en el arreglo.
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo, análisis y consideraciones teóricas correspondientes].}
+
+\begin{algorithm}[H]
+    \caption{Búsqueda Binaria Recursiva $\triangleright$ $V[beg..end]$ ordenado}
+    \begin{algorithmic}[1]
+        \Procedure{BinSearchRec}{$V, beg, end, x$}
+        \If{$beg > end$} 
+            \Return $-1$
+        \EndIf
+        \State $m \gets beg + \lfloor\frac{end - beg}{2}\rfloor$
+        \If{$V[m] == x$}
+            \Return $m$
+        \ElsIf{$V[m] < x$}
+            \Return \Call{BinSearchRec}{$V, m + 1, end, x$}
+        \Else
+            \Return \Call{BinSearchRec}{$V, beg, m - 1, x$}
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Al igual que su versión iterativa de la tarea pasada, fragmenta la zona objetivo fraccionalmente. Conlleva una complejidad temporal de $\mathcal{O}(\log n)$ para el peor y caso promedio.
+
+Por otro lado, la variante de \textbf{Búsqueda por Rango} aplica este mismo principio logarítmico para dictar umbrales a los topes izquierdo y derecho del arreglo de matches para un solo elemento $x$, retornando límites masivos usando sólo una superposición asintótica de $\mathcal{O}(\log n)$.
 
 \subsubsection{Búsqueda Exponencial}\label{sec:busqueda_exponencial}
-La búsqueda exponencial halla un rango propicio delimitado escalando en potencias de 2, para luego ceder y aplicar una búsqueda binaria local en el tramo hallado.
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo y la demostración en complejidad analítica].}
+La búsqueda exponencial o \textit{crecimiento galopante} halla una delimitación asumiendo aumentos en potencias de 2 (saltando multiplicativamente índices como $1, 2, 4, 8...$), para finalmente ceder la limitación precomputada a una búsqueda binaria tradicional.
+
+\begin{algorithm}[H]
+    \caption{Búsqueda Exponencial}
+    \begin{algorithmic}[1]
+        \Procedure{ExpSearch}{$V, n, x$}
+        \If{$V[0] == x$} \Return $0$ \EndIf
+        \State $i \gets 1$
+        \While{$i < n$ \textbf{and} $V[i] \le x$}
+            \State $i \gets i * 2$
+        \EndWhile
+        \Return \Call{BinSearch}{$V, i/2, \text{min}(i, n-1), x$}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Posee implicaciones asombrosas a nivel temporal $\mathcal{O}(\log i)$ donde $i$ es el índice del elemento. Conviertiéndola en un faro excepcionalmente raudo en grandes bases de datos.
 
 \subsubsection{Búsqueda por Interpolación}\label{sec:busqueda_interpolacion}
-Mimetizando la forma en que los seres humanos buscan en un diccionario, se realiza una aproximación probabilística del punto objetivo a partir de los extremos del área evaluada para dar atajos rápidos. 
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo y la complejidad asintótica, profundizando en por qué su peor caso depende directamente de la variabilidad del conjunto].}
+Apoya su funcionalidad interpretando numéricamente el "valor" lógico a buscar intersecándolo en una recta analítica generada entre las fronteras.
 
+\begin{algorithm}[H]
+    \caption{Búsqueda por Interpolación}
+    \begin{algorithmic}[1]
+        \Procedure{InterpolationSearch}{$V, n, x$}
+        \State $low \gets 0$, $high \gets n-1$
+        \While{$low \le high$ \textbf{and} $x \ge V[low]$ \textbf{and} $x \le V[high]$}
+            \State $pos \gets low + \lfloor \frac{(x - V[low]) * (high - low)}{(V[high] - V[low])} \rfloor$
+            \If{$V[pos] == x$} \Return $pos$ \EndIf
+            \If{$V[pos] < x$} $low \gets pos + 1$ \EndIf
+            \If{$V[pos] > x$} $high \gets pos - 1$ \EndIf
+        \EndWhile
+        \Return $-1$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+En el mejor de los casos (distribuciones de datos absolutamente lineales) su comportamiento salta a proezas de orden minúsculo  $\mathcal{O}(\log(\log n))$. Su fragilidad (Peor Caso, donde recae en $\mathcal{O}(n)$) yace en su estricta dependencia de si el conjunto del usuario de sistema expone vacíos gigantes de distribución de puntajes.
 
 \subsection{Análisis Teórico de Algoritmos de Selección}\label{sec:seleccion_dv}
 
 \subsubsection{Quick Select}\label{sec:quick_select}
-Basado fuertemente en el esquema de Quick Sort, se detiene prematuramente en la recursividad, desechando la porción del arreglo donde matemáticamente no puede existir el \textit{k-ésimo} elemento buscado.
-\vspace{0.3cm}
-\par \noindent\textit{[Aquí se insertará el pseudocódigo de manera formal y el análisis de la consecuente complejidad en el mejor y peor de los casos].}
+Comparte el mismo árbol generativo de Lomuto en Quick Sort. No obstante, al momento de ser partido el hilo, deduce si el objetivo o índice $k$-ésimo descansó hacia la izquierda o hacia la derecha. Descartando abrutamente la vía que no posee congruencia asintótica con la ubicación del elemento deseado.
+
+\begin{algorithm}[H]
+    \caption{Quick Select $\triangleright$ Búsqueda indexada selectiva}
+    \begin{algorithmic}[1]
+        \Procedure{QuickSelect}{$V, low, high, k$}
+        \State $p \gets$ \Call{LomutoPartition}{$V, low, high$}
+        \If{$p == k$} 
+            \Return $V[p]$
+        \ElsIf{$p > k$}
+            \Return \Call{QuickSelect}{$V, low, p - 1, k$}
+        \Else
+            \Return \Call{QuickSelect}{$V, p + 1, high, k$}
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Dado que se purga un lado de los datos de forma continua y nunca se ordena el 100\% del conjunto:
+\begin{itemize}
+    \item \textbf{Mejor y Caso Promedio $\mathcal{O}(n)$:} El sub-arreglo se trunca en proporción constante en la media; procesando $n + n/2 + n/4...$, siendo un orden de magnitud lineal.
+    \item \textbf{Peor Caso $\mathcal{O}(n^2)$:} Condicionado igualitariamente por los infortunios teóricos perimetrales de un pivoteo desbalanceado.
+\end{itemize}
 
 
 \subsection{Resultados Experimentales}\label{sec:resultados_experimentales}
