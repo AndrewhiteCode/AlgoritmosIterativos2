@@ -1,41 +1,38 @@
 # Plan de Gestión: Informe vs Código C (Proyecto 2: Divide y Vencerás)
 
 ## Estado actual
-Tras la revisión de la estructura del proyecto y los archivos en el repositorio, se detecta lo siguiente:
+Tras la reestructuración inicial del documento LaTeX, el estado es el siguiente:
 
-### 1. Código C (Completo)
+### 1. Código C (Completo ✓)
 El código cumple íntegramente con los requerimientos técnicos del Proyecto 2:
-- **Ordenamiento:** Implementado `merge_sort_classic` y `merge_sort_optimized` (con umbral para Insertion Sort). Implementado `quick_sort` con esquema partición Lomuto y las 4 variantes de selección de pivote (Último, Primero, Aleatorio, Mediana de 3).
-- **Búsqueda:** Implementadas `binary_search_recursive`, `binary_search_range`, `exponential_search` e `interpolation_search`.
-- **Selección:** Implementado `quick_select` para el k-ésimo elemento.
+- **Ordenamiento:** Implementado `merge_sort_classic` y `merge_sort_optimized` (con umbral). Implementado `quick_sort` (Lomuto) y 4 variantes de pivote.
+- **Búsqueda:** `binary_search_recursive`, `binary_search_range`, `exponential_search` e `interpolation_search`.
+- **Selección:** `quick_select`.
 
-### 2. Informe (En progreso - Urgente)
-El archivo `desarrollo.tex` principal aún describe exclusivamente los algoritmos correspondientes a la **Tarea 1** (Búsqueda secuencial, Binaria iterativa, Swap, Insertion y Selection Sort). 
+### 2. Informe (Estructura formal lista ✓ / Contenido en progreso)
+Se limpió el rastro de la Tarea 1. Los archivos `introduccion.tex`, `objetivos.tex`, `conclusiones.tex`, `anexos.tex`, `Informe.tex` y `desarrollo.tex` ya poseen el contexto, abstract y apartados exclusivos de *Divide y Vencerás*. Sin embargo, **las secciones se encuentran con placeholders (textos temporales)** a la espera de ser rellenadas.
 
-## Remanentes / Faltantes a integrar en el Informe
+---
 
-1. **Análisis Teórico de Algoritmos de Ordenamiento (D&V):**
-   - Análisis de complejidad temporal y pseudocódigos para **Merge Sort clásico**.
-   - Análisis teórico y justificación de optimización de **Merge Sort** junto con Insertion Sort.
-   - Análisis de complejidad de **Quick Sort** indicando cómo afecta en el mejor, peor y promedio cada modo de elegir el pivote.
+## Tareas Pendientes (Remanentes)
 
-2. **Análisis Teórico de Algoritmos de Búsqueda (D&V):**
-   - **Búsqueda Binaria recursiva** y **Búsqueda Binaria para rangos**.
-   - **Búsqueda Exponencial** y **Búsqueda por Interpolación**.
+### Paso 1: Análisis Teórico (Pseudocódigos y Complejidad)
+Requiere redactar en LaTeX las fórmulas matemáticas, tablas de costo y algoritmos de:
+- [ ] **Merge Sort**: Clásico y análisis de la justificación matemática del umbral vs Insertion Sort.
+- [ ] **Quick Sort**: Análisis de complejidad de sus 4 heurísticas de pivote (Mejor, peor y promedio).
+- [ ] **Búsquedas**: Binaria (recursiva y rango), Exponencial y por Interpolación. 
+- [ ] **Selección**: Quick Select (Mejor y peor caso).
 
-3. **Análisis Teórico de Algoritmos de Selección (D&V):**
-   - **Quick Select** (Mejor y peor caso).
+### Paso 2: Resultados Experimentales (Esperando Plots)
+Una vez que se generen los gráficos, insertarlos y comentarlos:
+- [ ] Comparativa empírica del umbral de Merge Sort vs Clásico.
+- [ ] Comparativa empírica de pivotes en Quick Sort.
+- [ ] Gráficos evaluativos de las búsquedas en peor caso y promedio.
+- [ ] **Contraste de Paradigmas**: Comparación del rendimiento de Quick Sort/Merge Sort $\mathcal{O}(n \log n)$ contra los algoritmos previos de la Tarea 1 $\mathcal{O}(n^2)$.
 
-4. **Resultados Experimentales (Próximo paso tras generar plots):**
-   - Gráficos comparativos del umbral de Merge Sort vs Merge Sort clásico.
-   - Gráficos comparativos y análisis de las variaciones del pivote de Quick Sort.
-   - Comparación del rendimiento de Quick Sort contra los algoritmos previos de la Tarea 1.
-   - Gráficos evaluativos de las búsquedas en peor caso y promedio.
-   - Justificaciones con base empírica respecto al costo vs beneficio de cada implementación.
+### Paso 3: Aplicación Práctica / Funcionalidad
+- [ ] Describir con capturas/texto cómo la consola del sistema implementa las funciones de ranking N, límite de rangos, y ordenamiento local.
 
-5. **Aplicación Práctica / Funcionalidad del Sistema:**
-   - Describir cómo se integraron los algoritmos para visualizar un Ranking de N deportistas, listar en rangos de puntajes u ordenar el set completo.
-
-6. **Actualización Estructural del Documento:**
-   - Revisiones a los documentos de las contribuciones si aplica (`contribucion_{andres, diego, emmanuel}.tex`).
-   - Conclusiones refactorizadas enfocadas en las ventajas y desventajas del paradigma de _Divide y Vencerás_.
+### Paso 4: Cierre Documental
+- [ ] Rellenar los párrafos pre-estructurados de `conclusiones.tex` basados en lo que digan los gráficos experimentales.
+- [ ] Actualizar archivos de contribución de equipo (`contribucion_{andres, diego, emmanuel}.tex`).
