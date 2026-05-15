@@ -156,7 +156,7 @@ Dado que se purga un lado de los datos de forma continua y nunca se ordena el 10
 
 
 \subsection{Resultados Experimentales}\label{sec:resultados_experimentales}
-Esta sección contrasta los hallazgos teóricos con simulaciones obtenidas en los datasets estructurados. El proceso se ejecuto con el \textit{smoke} del binario en modo no interactivo, generando tres conjuntos de datos (ordenado, invertido y aleatorio) de $N=25000$, ejecutando todas las ejecuciones en cadena y luego graficando con Python. Para rigor de una operación sin fallos de computo se decidió este sistema, realizandose secuencialmente las ejecuciones en un único hilo del procesador. La ejecucion completa tomo aproximadamente entre 40 minutos y 1 hora.
+Esta sección contrasta los hallazgos teóricos con simulaciones obtenidas en los datasets estructurados. El proceso se ejecuto con el \textit{smoke} del binario en modo no interactivo, generando tres conjuntos de datos (ordenado, invertido y aleatorio) de $N=25000$, ejecutando todas las ejecuciones en cadena y luego graficando con Python. Esta carga corresponde a la Fase 2 del informe, cuyo objetivo fue revisar el comportamiento empírico de los algoritmos bajo una batería completa de pruebas. Para rigor de una operación sin fallos de computo se decidió este sistema, realizandose secuencialmente las ejecuciones en un único hilo del procesador. La ejecucion completa tomo aproximadamente entre 40 minutos y 1 hora.
 
 El estilo de ejecucion usado en \texttt{smoke.c} fue estrictamente secuencial, encadenando cada experimento y su escritura a CSV antes de iniciar el siguiente. Esta causalidad reduce solapamientos temporales y evita el agotamiento de recursos por concurrencia, garantizando estabilidad y trazabilidad en los resultados.
 
@@ -247,12 +247,81 @@ Se observa crecimiento aproximadamente lineal en ambos casos, con un peor caso q
 
 \subsection{Aplicación Práctica y Funcionalidades}\label{sec:aplicacion_practica}
 \vspace{0.3cm}
-El desarrollo técnico del binario interactivo implementó un menú especializado denominado \textit{Data Analytics \& Rankings}, mediante el cual los usuarios pueden auditar interactivamente la integridad de los datos de la estructura central de forma abstracta y paginada.
+
+El binario interactivo implementado provee un conjunto exhaustivo de herramientas para manipular, analizar y experimentar con estructuras de datos algorítmicas. El menú principal se divide en siete opciones, cada una dirigida a una tarea específica dentro del contexto de análisis de rendimiento de algoritmos de Divide y Vencerás.
+
+\subsubsection{Menú Principal y Opciones Generales}\label{sec:menu_principal}
+
+El programa arranca con un menú (\textbf{MAIN MENU}) que presenta al usuario las siguientes opciones:
+
+\begin{enumerate}
+    \item \textbf{Generar nuevo CSV (Generate new CSV):} Permite crear un conjunto de datos de jugadores con tamaño $N$ configurable. El usuario selecciona el tipo de disposición deseada: arreglo ordenado, invertido o aleatorio (shuffled). Internamente, el programa genera estructuras \textit{Player} con identificadores, nombres aleatorios, equipos, puntuaciones y competiciones participadas, almacenándose en formato CSV.
+    
+    \item \textbf{Leer CSV Actual (Read actual CSV):} Carga y exhibe en la consola el archivo CSV existente (\texttt{build/db/players.csv}), aplicando paginación automática mediante \textit{more-like} bindings para manejar datasets grandes de forma interactiva.
+    
+    \item \textbf{Ordenar CSV (Sort CSV):} Abre un submenú con 10 opciones de algoritmos de ordenamiento:
+    \begin{itemize}
+        \item Algoritmos cuadráticos clásicos: \textit{Swap Sort} ($\mathcal{O}(n^2)$), \textit{Insertion Sort} ($\mathcal{O}(n^2)$), \textit{Selection Sort} ($\mathcal{O}(n^2)$), \textit{Cocktail Shaker Sort} ($\mathcal{O}(n^2)$).
+        \item Algoritmos divide y vencerás: \textit{Merge Sort Clásico} y \textit{Merge Sort Optimizado con Umbral configurable}, ambos de orden $\mathcal{O}(n \log n)$.
+        \item Variantes de Quick Sort con distintas heurísticas de pivoteo: último elemento, primer elemento, pivote aleatorio y mediana de tres, todas con complejidad promedio $\mathcal{O}(n \log n)$ pero peor caso variable.
+    \end{itemize}
+    Tras ejecutar el ordenamiento, la consola exhibe el arreglo ordenado de forma paginada.
+    
+    \item \textbf{Búsqueda en CSV (Search value in CSV):} Redirige al submenú \textbf{Data Analytics \& Rankings}, descrito en detalle más adelante.
+    
+    \item \textbf{Ejecutar Experimentos (Run experiment):} Abre un menú de selección para ejecución de mediciones de rendimiento temporal. Las opciones incluyen: pruebas de umbral para Merge Sort optimizado, experimentos de ordenamiento en tres casos (mejor, peor, promedio), búsquedas (caso promedio y peor), selección, o ejecución de todas las pruebas simultáneamente. Cada experimento genera archivos CSV con tiempos de ejecución.
+    
+    \item \textbf{Ejecutar Smoke + Plots (Run smoke + plots):} Automatiza la ejecución del \textit{smoke test} completo con 25,000 puntos de datos, generando gráficos PNG mediante Python \textit{matplotlib}. Esta es la variante usada en la Fase 2 para las comparaciones experimentales; la Fase 3 reutiliza la misma cadena de validación, pero con 1000 datos de prueba para revisar el funcionamiento estructural del sistema.
+    
+    \item \textbf{Salir (Exit):} Termina la ejecución del programa.
+\end{enumerate}
+
+\subsubsection{Menú Data Analytics \& Rankings}\label{sec:data_analytics_menu}
+
+El submenú especializado \textbf{Data Analytics \& Rankings} (opción 4 del menú principal) implementa cuatro consultas típicas en sistemas de ranking e indexación:
+
+\begin{enumerate}
+    \item \textbf{Top N Ranking (por Score):} Ordena el dataset completo de manera descendente por puntuación y expone los $N$ mejores atletas. Internamente, el usuario puede elegir entre \textbf{Quick Sort (Mediana de Tres)} con complejidad $\mathcal{O}(n \log n)$ promedio o \textbf{Merge Sort Optimizado} con garantía determinística $\mathcal{O}(n \log n)$. La justificación práctica es que requerir el Top N implica necesariamente una fracción continua ordenada; ambos algoritmos, aunque con costos competitivos a nivel de tiempo, proporcionan estabilidad en los datos paginados subsecuentes.
+    
+    \item \textbf{Atleta K-ésimo Mejor (Find K-th Best Athlete):} Localiza el atleta en la posición K del ranking sin necesidad de ordenar la totalidad del dataset. El usuario elige entre dos estrategias:
+    \begin{itemize}
+        \item \textbf{Quick Select (complejidad promedio $\mathcal{O}(n)$):} Implementa el algoritmo de selección lineal clásico. Mediante particionamiento sucesivo similar a Quick Sort, descarta iterativamente la mitad del espacio de búsqueda que no contiene el K-ésimo elemento, evitando la sobrecarga de ordenamiento completo.
+        \item \textbf{Full Sort + Índice (complejidad $\mathcal{O}(n \log n)$):} Ordena el dataset y accede directamente al índice. Esta alternativa es prácticamente equivalente cuando K es pequeño y la constante de Quick Sort es prohibitiva.
+    \end{itemize}
+    
+    \item \textbf{Búsqueda por Rango de Puntajes (Search by Score Range):} Localiza todos los atletas cuyas puntuaciones caen dentro de un rango $[\text{minScore}, \text{maxScore}]$. La implementación ordena previamente el dataset por Score mediante Quick Sort (para agilizar la búsqueda subsequente) y luego itera de manera lineal a través del arreglo ordenado, recogiendo todos los elementos dentro del rango. Esto aprovecha la proximidad de elementos en el rango ordenado, exhibiendo eficiencia práctica por encima de búsquedas completamente ingenuitas.
+    
+    \item \textbf{Búsqueda por ID Exacto (Search Athlete by exact ID):} Localiza un atleta específico utilizando su identificador único. El programa carga el dataset y aplica una búsqueda lineal o bien Búsqueda Binaria si el dataset está previamente ordenado por ID. Esta consulta ejemplifica un caso de uso típico donde la complejidad $\mathcal{O}(\log n)$ binaria supera ampliamente el acceso naive de orden $\mathcal{O}(n)$.
+\end{enumerate}
+
+\subsubsection{Estructura de Datos y Gestión de Memoria}\label{sec:estructura_datos}
+
+La entidad central del programa es la estructura \textbf{Player}:
+
+Definimos la estructura \textit{Player} de la siguiente manera:
+\begin{verbatim}
+struct Player {
+    int id;                    // Identificador único
+    char name[64];             // Nombre del atleta
+    char team[64];             // Equipo
+    float score;               // Puntuación acumulada
+    int competitions;          // Competiciones participadas
+    bool potatoe;              // Bandera especial
+};
+\end{verbatim}
+
+Cada registro ocupa aproximadamente 140 bytes en memoria (depende de alineación). Para $N = 25,000$ elementos, la asignación dinámica ronda los 3.5 MB. Los datos CSV se cargan secuencialmente en memoria primaria desde disco, permitiendo operaciones in-place sin trasferencias adicionales entre niveles de cache o memoria.
+
+\subsubsection{Aplicación de Paradigmas Algorítmicos}\label{sec:aplicacion_paradigmas}
+
+A lo largo de todas las opciones del menú, el programa integra efectivamente el paradigma de Divide y Vencerás en contextos prácticos:
 
 \begin{itemize}
-    \item \textbf{Ranking Top N (por Score):} La consola permite generar un escalafón con los mejores atletas. Desde un punto de vista asintótico y práctico, se optó internamente por un \textbf{Merge Sort} completo o bien un pre-ordenamiento sistemático, justificándose debido a que el usuario demanda recuperar una fracción subsecuente continua ordenada descendientemente.
-    \item \textbf{Listado del K-ésimo Mejor Atleta:} Para exhibir a un único jugador dentro del Top K, se hace uso estricto del algoritmo \textbf{Quick Select}. Esto resulta en un ahorro rotundo de tiempo, ya que es innecesario ordenar la totalidad de los datos solo para encontrar el elemento de la posición deseada, promediando un tiempo $\mathcal{O}(n)$.
-    \item \textbf{Búsqueda de deportistas por rango de puntos:} La búsqueda de cotas (tanto base como techo) de puntajes se materializa eficientemente a través de metodologías logarítmicas como \textbf{Búsqueda Binaria por Rangos} o \textbf{Búsqueda por Interpolación}. En casos donde la distribución del puntaje está altamente uniformada, ambos algoritmos limitan las posiciones de retorno a velocidades de iteración excepcionalmente bajas respecto a un barrido secuencial simple.
+    \item \textbf{Escalabilidad Logarítmica:} Las búsquedas binarias, exponenciales e interpolación sobre datos ordenados garantizan tiempo logarítmico, tornando viables consultas sobre millones de registros.
+    \item \textbf{Balance Espacio-Tiempo:} Merge Sort sacrifica espacio adicional (necesitando $\mathcal{O}(n)$ de memoria auxiliar) a cambio de garantías determinísticas de tiempo; Quick Sort con Mediana de Tres es más frugal pero con peor caso poco probable en práctica.
+    \item \textbf{Combinación de Estrategias:} El menú Data Analytics \& Rankings ejemplifica cómo combinar múltiples algoritmos (ordenamiento + búsqueda lineal post-orden, Quick Select sin ordenamiento previo, etc.) según la naturaleza específica de cada consulta.
+    \item \textbf{Paginación y Usabilidad:} El programa implementa buffers de salida y paginación (\textit{more-like}) para manejar datasets grandes sin sobrecargar el terminal, manteniendo la claridad visual.
 \end{itemize}
 
-Mediante el uso de estas herramientas el usuario visualiza los deportistas paginadamente de a bloques, recibiendo \textit{prints} claros desde el \textit{stdout} con la complejidad aplicada garantizada en segundo plano.
+\subsubsection{Validación Operativa}\label{sec:validacion_operativa}
+Para validar el flujo completo del sistema en un entorno controlado, se ejecutó el \textit{smoke test} con un tamaño reducido de $N=1000$ elementos, priorizando una verificación funcional rápida. A diferencia de la Fase 2, aquí no se busca volver a evaluar a fondo el rendimiento de los algoritmos, sino comprobar la consistencia estructural del menú, la generación de datos, el encadenamiento de experimentos y la salida de gráficos sobre una carga de prueba menor. Esta ejecución generó los CSV de prueba y verificó que el pipeline de generación, lectura y análisis opera correctamente antes de escalar a tamaños mayores.
