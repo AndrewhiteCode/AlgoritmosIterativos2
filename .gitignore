@@ -6,11 +6,8 @@
 /build/
 /obj/
 /.dist/
-*.gif
-*.png
 allegro6/.venv/
 .venv/
-docs/results/
 docs/Informe/build/
 
 # LaTeX

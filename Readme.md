@@ -58,16 +58,20 @@ Una vez clonado el repositorio se espera el siguiente flujo de comandos:
 Una vez ejecutado el programa el usuario se enfrentará a un menú de 6 opciones; finalizada la ejecución del programa, deberá de ejecutar nuevamente `make run` para volver al menú.
 
 A continuación se detallan las funcionalidades del programa:
-1. **Generate CSV**: Permite generar un archivo CSV con los datos de entrada del programa, que será utilizado para la ejecución del experimento. El archivo queda almacenado en la carpeta `build/db/`.
-2. **Read CSV**: Permite leer el archivo CSV generado en el paso anterior.
-3. **Sort CSV**: Permite ordenar el archivo CSV utilizando algoritmos de Divide y Vencerás (Merge Sort con optimizaciones y Quick Sort con distintas estrategias de pivote). La ordenación se realiza en memoria y puede realizarse por cualquiera de los campos que componen un deportista (ID, nombre, equipo, puntaje, competencias).
-4. **Search CSV**: Permite buscar un jugador en el archivo CSV bajo distintos algoritmos recursivos de búsqueda (Búsqueda Binaria, Búsqueda Exponencial, Búsqueda por Interpolación y Búsqueda por Rangos) conocido su ID.
-5. **Select k-ésimo**: Permite obtener el k-ésimo mejor deportista utilizando Quick Select.
-6. **Ranking de mejores N deportistas**: Permite generar un ranking de los mejores N deportistas por puntaje utilizando algoritmos de selección.
-7. **Rango de puntajes**: Permite mostrar los deportistas cuyo puntaje se encuentre dentro de un rango determinado.
-8. **Run experiment**: Permite ejecutar el experimento de ordenamiento y búsqueda recursiva. El resultado del experimento se almacena en la carpeta `build/db/` y se puede graficar con `make plot` (como se detalla en la sección siguiente).
-    - El experimento evalúa 10 algoritmos de ordenamiento (Merge Sort clásico, Merge Sort optimizado con Insertion Sort en umbrales 10 y 50, Quick Sort con 3 estrategias de pivote: último, aleatorio y mediana de tres) y algoritmos de búsqueda recursiva. Se registran tiempos de ejecución para distintos tamaños de entrada.
-    - Las variables que pueden ser modificadas se encuentran en el archivo `incs/generate_exec_times.h`: número de deportistas (seleccionado al generar el CSV), número de pasos de la prueba (NUM_STEPS) y cantidad de repeticiones por paso (NUM_TRIALS). Luego de modificar las variables, se debe ejecutar `make clean && make && make run` para recompilar el programa exitosamente.
+
+Una vez ejecutado el programa el usuario se enfrentará a un menú principal de 6 opciones; finalizada y validada cada funcionalidad, el menú volverá a aparecer o deberá ser reiniciado:
+1. **Generate new CSV**: Permite generar un archivo CSV con los datos de entrada del programa. Puede elegirse la cantidad de deportistas y el estado base del arreglo (ordenado, inverso o aleatorio). El archivo queda almacenado en la carpeta `build/db/`.
+2. **Read actual CSV**: Permite leer el archivo CSV generado en el paso anterior y lo muestra por consola utilizando el sistema de paginación.
+3. **Sort CSV**: Permite ordenar recursiva e iterativamente el archivo CSV, listando los diversos métodos implementados: Swap Sort, Insertion Sort, Selection Sort, Cocktail Shaker Sort, y los Algoritmos de Divide y Vencerás (Merge Sort Clásico, Merge Sort Optimizado con umbral dinámico, Quick Sort con pivote final, primer elemento, aleatorio y mediana de 3). La ordenación puede indicarse bajo cualquier subcampo o criterio del CSV (ID, Name, Team, Score, Competitions).
+4. **Data Analytics & Rankings**: Submenú de análisis que conjunta varias herramientas de búsqueda y ranking avanzadas:
+   - *Generate Top N Ranking*: Clasifica los mejores deportistas seleccionando primero un formato de ordenamiento avanzado, presentando finalmente el top N según sus puntajes.
+   - *Find the K-th Best Athlete*: Utiliza `quick_select` (O(n)) o la búsqueda completa para encontrar la n-ésima posición por puntaje exacto.
+   - *Search Athletes by Score Range*: Muestra a los deportistas cuyo puntaje se encuentra dentro de un rango numérico provisto a elección.
+   - *Search Athlete by exact ID*: Permite buscar un ID específico probando a elección una Búsqueda Lineal o bien métodos avanzados como Búsqueda Binaria Pura, Iterativa, Recursiva, Exponencial o Interpolación. 
+5. **Run experiment**: Permite ejecutar el experimento masivo de ordenamiento y búsqueda recursiva. El resultado experimental se almacena en la estructura en `build/db/experiment.csv` y se puede graficar su visualización con `make plot`.
+    - El experimento evalúa 10 algoritmos de ordenamiento distintos, desde elementales cuadráticos en $O(n^2)$ hasta estructuras complejas optimizadas de tipo $O(n \log n)$. 
+    - Las variables del ecosistema del test habitan y se alteran formalmente en `incs/generate_exec_times.h`: número de pasos experimentales (NUM_STEPS) y las repeticiones por cada paso (NUM_TRIALS). Acorde a las variaciones se solicita purgar los compilados y refrecar el core haciendo un `make clean && make`.
+6. **Exit**: Cierra la sesión activa del binario por retorno nulo.
 
 
 > [!important]
