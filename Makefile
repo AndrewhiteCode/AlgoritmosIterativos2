@@ -35,6 +35,7 @@ clean:
 	rm -f $(OBJ_FILES)
 	rm -rf build/*.*
 	rm -rf build/db/*
+	rm -f docs/Informe/Informe.aux docs/Informe/Informe.bcf docs/Informe/Informe.blg docs/Informe/Informe.fdb_latexmk docs/Informe/Informe.fls docs/Informe/Informe.log docs/Informe/Informe.run.xml docs/Informe/Informe.toc docs/Informe/Informe.bbl docs/Informe/Informe.bbl-SAVE-ERROR docs/Informe/Informe.synctex.gz docs/Informe/indent.log
 	rm -f *.gif
 	rm -f *.png
 
