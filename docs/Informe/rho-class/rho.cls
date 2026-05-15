@@ -36,7 +36,7 @@
 \ProvidesClass{rho-class/rho}[2024/09/01 Rho LaTeX class]
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{extarticle}}
 \ProcessOptions\relax
-\LoadClass[twocolumn]{extarticle} % onecolumn
+\LoadClass[twocolumn,twoside]{extarticle} % onecolumn
 \AtEndOfClass{\RequirePackage{microtype}}
 
 %----------------------------------------------------------
