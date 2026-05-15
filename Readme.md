@@ -3,7 +3,7 @@
 **Universidad de Magallanes - Diseño de Algoritmos - 2026**
 
 **Proyecto:** Proyecto 2: Divide y Vencerás  
-**Estudiantes:** [Andres Barbosa](mailto:abarbosa@umag.cl), [Emmanuel Velásquez](mailto:emvelasq@umag.cl), [Diego Oyarzo](mailto:diegoyaque@umag.cl).
+**Estudiantes (autores de este fork):** Andres Barbosa, Milton Hernández, Iván Gallardo.
 
 **Docente:** [Jacqueline Aldridge](mailto:jacqueline.aldridge@umag.cl)
 
@@ -11,7 +11,11 @@
 - Entrega: Viernes 15 de mayo 2026, 12:00 (medio día)
 - Presentación: Lunes 18 de mayo
 
-**Proyecto anterior:** [PALYER - Proyecto 1](https://github.com/AndrewhiteCode/AlgoritmosIterativos2) (Algoritmos Iterativos)
+**Origen / Fork:** Este repositorio se basa en un fork del proyecto original PALYER: https://github.com/AndrewhiteCode/PALYER
+
+**Autores originales / contacto del fork:** Este fork y las adaptaciones actuales fueron realizadas por los estudiantes Andres Barbosa, Milton Hernández e Iván Gallardo.
+
+**Documento de referencia (instrucciones docente):** https://pregradovirtual.umag.cl/pluginfile.php/836423/mod_resource/content/10/DAL_Tarea2.pdf
 
 El presente repositorio es una continuación del Proyecto 1, enfocándose en la implementación y evaluación de algoritmos basados en la estrategia de **Divide y Vencerás**. Los estudiantes analizarán el comportamiento de estos algoritmos desde una perspectiva teórica y experimental, evaluando su rendimiento frente a distintos tamaños de entrada y estrategias de optimización.
 

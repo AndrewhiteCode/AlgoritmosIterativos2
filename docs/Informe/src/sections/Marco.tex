@@ -1,1 +1,17 @@
 \section{Marco Teórico}\label{sec:marco}
+
+El presente proyecto se apoya en el paradigma de \textit{Divide y Vencerás}, una estrategia de diseño algorítmico que resuelve un problema grande dividiéndolo en subproblemas más pequeños, resolviendo cada uno de forma recursiva y combinando luego sus resultados. Esta técnica suele producir mejoras sustanciales frente a enfoques iterativos o de exploración completa, especialmente cuando las operaciones de división y combinación son más baratas que procesar la entrada completa de manera secuencial.
+
+\subsection{Ordenamiento}
+Los algoritmos de ordenamiento estudiados en este trabajo incluyen variantes clásicas y optimizadas de \textit{Merge Sort} y \textit{Quick Sort}. \textit{Merge Sort} garantiza complejidad temporal $\mathcal{O}(n \log n)$ en todos los casos, a costa de memoria auxiliar adicional. \textit{Quick Sort}, por su parte, conserva un comportamiento promedio de $\mathcal{O}(n \log n)$, pero depende de la elección del pivote y puede degradarse a $\mathcal{O}(n^2)$ en escenarios desfavorables.
+
+La versión optimizada de \textit{Merge Sort} introduce un umbral para delegar subarreglos pequeños a \textit{Insertion Sort}, reduciendo el costo constante de la recursión y mejorando el rendimiento empírico sin alterar la cota asintótica principal.
+
+\subsection{Búsqueda}
+Para la búsqueda de elementos en arreglos ordenados se emplean técnicas como \textit{Binary Search}, \textit{Exponential Search} e \textit{Interpolation Search}. La búsqueda binaria reduce el espacio de búsqueda a la mitad en cada paso y ofrece complejidad $\mathcal{O}(\log n)$. La búsqueda exponencial permite localizar intervalos rápidamente antes de aplicar una búsqueda binaria, mientras que la interpolación aprovecha la distribución de los datos para estimar la posición probable del elemento.
+
+\subsection{Selección}
+\textit{Quick Select} es el algoritmo de selección utilizado para hallar el elemento K-ésimo sin ordenar completamente el arreglo. Su comportamiento promedio es lineal, $\mathcal{O}(n)$, ya que descarta en cada iteración la mitad del espacio que no contiene la respuesta. En el peor caso, al igual que \textit{Quick Sort}, puede alcanzar $\mathcal{O}(n^2)$ si el particionamiento es muy desbalanceado.
+
+\subsection{Criterio de Evaluación}
+La comparación experimental del proyecto se basa en medir tiempos de ejecución, observar el efecto de la estructura de los datos y contrastar dichos resultados con el análisis asintótico. De este modo, el marco teórico no solo describe los algoritmos, sino que también justifica por qué ciertas optimizaciones, como el umbral en ordenamiento o la elección del pivote, tienen impacto directo sobre el comportamiento real del sistema.

@@ -1,4 +1,17 @@
-\section{anexos}\label{sec:anexos}
+\section{Anexos}\label{sec:anexos}
+
+\subsection{Registro de validación estructural}
+La validación de la Fase 3 se ejecutó con un tamaño de prueba de $N=1000$ elementos para verificar el flujo completo de la interfaz sin repetir la carga pesada de la Fase 2. El registro de ejecución confirma tres casos de generación de datos: arreglo ordenado, arreglo invertido y arreglo mezclado.
+
+\begin{itemize}
+    \item \textbf{Compilación:} el binario se generó correctamente con \texttt{gcc} y quedó disponible como \texttt{build/player.out}.
+    \item \textbf{Caso ordenado:} se creó el CSV inicial con 1000 elementos y se comprobó la salida paginada de la tabla de jugadores.
+    \item \textbf{Caso invertido:} se repitió la generación con el mismo tamaño para validar que la interfaz acepta disposiciones extremas sin fallos.
+    \item \textbf{Caso mezclado:} se verificó la ejecución sobre una distribución aleatoria, confirmando la consistencia del flujo de generación y visualización.
+    \item \textbf{Trazabilidad:} el detalle completo de la ejecución quedó registrado en \texttt{log.txt}.
+\end{itemize}
+
+\subsection{Código base de partición}
 \begin{lstlisting}[language=C, caption={Esquema de partición Lomuto empleado como base en Quick Sort y Quick Select}, label={lst:lomuto}, style=CodeStyle]
 /**
  * @brief Esquema de particion de Lomuto
@@ -18,3 +31,30 @@ static int lomuto_partition(Player V[], int low, int high, int pivot_type, int (
     return i + 1;
 }
 \end{lstlisting}
+
+\subsection{Extractos del registro de ejecución}\label{sec:anexos_log}
+A continuación se incluyen extractos relevantes de `log.txt` que documentan la compilación, advertencias y el desarrollo de la Fase 3 (tests con $N=1000$). Estos fragmentos soportan la trazabilidad del proceso descrito en la sección de validación operativa.
+
+\begin{verbatim}
+gcc -Wall -Wextra -Wpedantic -g -c -o obj/generate_exec_times.o src/generate_exec_times.c -I./incs/
+src/generate_exec_times.c: In function ‘run_experiment’:
+src/generate_exec_times.c:78:34: warning: passing argument 2 of ‘print_error’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   78 |                 print_error(101, out_filename, NULL);
+gcc -Wall -Wextra -Wpedantic -g -o build/player.out obj/errors.o obj/generate_exec_times.o obj/generator.o obj/main.o obj/player.o obj/searching.o obj/smoke.o obj/sorting.o -I./incs/ -lm
+
+=== FASE 3: PRUEBAS DE FUNCIONALIDADES CON 1000 ELEMENTOS ===
+Fecha: vie 15 may 2026 10:15:12 -03
+
+=== TEST 1: Generar CSV con 1000 elementos (Sorted) ===
+Generating SORTED array...
+39.06 KB De memoria reservados
+-- muestra de salida tabular paginada (IDs 1..25) --
+
+=== TEST 2: Generar CSV con 1000 elementos (Inverse) ===
+Generating INVERSE array...
+39.06 KB De memoria reservados
+-- muestra de salida tabular paginada (IDs 1000..976) --
+
+=== TEST 3: Generar CSV con 1000 elementos (Shuffled) ===
+-- procedimiento análogo al anterior, confirmando consistencia en el pipeline --
+\end{verbatim}

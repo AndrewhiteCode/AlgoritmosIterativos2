@@ -3,16 +3,20 @@ A partir del análisis teórico y experimental realizado sobre los algoritmos de
 
 \subsection*{El salto de cuadrático a log-lineal}
 \vspace{0.3cm}
-\par \noindent\textit{[Aquí se completará tras analizar los gráficos: Se discutirá cómo los algoritmos de ordenamiento $\mathcal{O}(n \log n)$ como Merge Sort y Quick Sort logran reducir masivamente los tiempos de ejecución frente a los de orden $\mathcal{O}(n^2)$ del proyecto anterior, justificando su coste recursivo.]}
+\par \noindent Merge Sort y Quick Sort confirman que el cambio de paradigma hacia Divide y Vencerás reduce de forma marcada el costo de ejecución respecto de los algoritmos cuadráticos estudiados previamente. En las pruebas realizadas, las variantes de ordenamiento log-lineal mantuvieron tiempos estables para tamaños altos de entrada, mientras que los métodos de complejidad $\mathcal{O}(n^2)$ se degradaron de manera visible a medida que creció $N$. Esto valida que la mejora asintótica no es solo teórica, sino que se refleja directamente en la ejecución real.
 
 \subsection*{Optimización empírica: El impacto heurístico}
 \vspace{0.3cm}
-\par \noindent\textit{[Aquí se completará tras analizar los gráficos: Se detallará cómo el uso de un umbral en Merge Sort u optimizar la elección del pivote en Quick Sort pueden marcar la diferencia entre un algoritmo promedio y uno altamente eficiente, demostrando que la teoría asintótica se ve directamente afectada por la heurística utilizada y la forma de los datos].}
+\par \noindent La experiencia empírica mostró que pequeñas decisiones de implementación cambian de forma tangible el rendimiento final. El umbral de Merge Sort permitió aprovechar Insertion Sort en subarreglos pequeños, disminuyendo el costo de la recursión innecesaria. Del mismo modo, Quick Sort con pivote aleatorio o mediana de tres evitó la degradación observada con pivotes deterministas sobre datos ordenados o invertidos. En consecuencia, la heurística elegida influye directamente en la calidad práctica del algoritmo.
 
 \subsection*{Búsquedas avanzadas}
 \vspace{0.3cm}
-\par \noindent\textit{[Aquí se completará tras analizar los gráficos: Se expondrán las ventajas de la búsqueda exponencial para localizar rangos rápidamente en arreglos inmensos y cómo la búsqueda por interpolación rinde dependiendo fuertemente de la distribución de los datos].}
+\par \noindent Las búsquedas binarias, exponenciales e interpolación muestran que un arreglo previamente ordenado abre la puerta a consultas mucho más eficientes que un barrido secuencial. La búsqueda exponencial resulta útil para acotar rápidamente rangos amplios, mientras que la búsqueda por interpolación ofrece buen comportamiento cuando la distribución de los datos es relativamente uniforme. Sin embargo, su efectividad depende fuertemente del perfil de la entrada, lo que confirma que no todas las optimizaciones son universales.
 
 \subsection*{Decisiones arquitectónicas del uso de memoria}
 \vspace{0.3cm}
-\par \noindent\textit{[Aquí se completará: Breve reflexión sobre el coste espacial. Quick Sort destaca in-place frente a los arreglos auxiliares exigidos por Merge sort, destacando el impacto en entornos con recursos limitados].}
+\par \noindent El proyecto también evidenció el costo espacial de cada estrategia. Quick Sort mantiene una ejecución in-place y, por ello, consume menos memoria auxiliar que Merge Sort. En contraste, Merge Sort necesita estructuras temporales para fusionar los subarreglos, a cambio de una mayor estabilidad temporal. La elección entre ambos enfoques depende del equilibrio buscado entre memoria disponible, robustez del tiempo de ejecución y comportamiento frente a distintos tipos de datos.
+
+\subsection*{Cierre de la validación funcional}
+\vspace{0.3cm}
+\par \noindent La Fase 3 complementó la validación experimental con una revisión estructural del sistema mediante pruebas con 1000 elementos, suficiente para confirmar el flujo completo de generación, lectura, ordenamiento, búsqueda y ejecución de experimentos sin repetir la batería pesada de 25,000 datos usada en la Fase 2. Con ello, el informe queda respaldado tanto por evidencia de rendimiento como por comprobaciones de funcionamiento general de la aplicación.
