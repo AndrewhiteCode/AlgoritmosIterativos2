@@ -1,54 +1,20 @@
 \section{anexos}\label{sec:anexos}
-\begin{lstlisting}[language=C, caption={Implementación de SwapSort para números enteros}, label={lst:swapsort_int}, style=CodeStyle]
+\begin{lstlisting}[language=C, caption={Esquema de partición Lomuto empleado como base en Quick Sort y Quick Select}, label={lst:lomuto}, style=CodeStyle]
 /**
- * @brief Ordenamiento por intercambio
- * 
- * @param V arreglo de enteros
- * @param n tamanho del arreglo
+ * @brief Esquema de particion de Lomuto
  */
-void swap_sort(int V[], int n)
-{
-	for (int i = 1; i <= n - 1; i++) {
-		int swapped = 0;
-
-		for (int j = 0; j <= n - 1 - i; j++) {
-			if (V[j] > V[j + 1]) {
-				swap(&V[j], &V[j + 1]);
-				swapped = 1;
-			}
-		}
-
-		if (swapped == 0) {
-			printf("There was no swapping\n");
-			break;
-		}
-	}
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C, caption={Implementación de SwapSort para jugadores (estructuras Player)}, label={lst:swapsort_player}, style=CodeStyle]
-/**
- * @brief Ordenamiento por intercambio
- * 
- * @param V arreglo de enteros
- * @param n tamanho del arreglo
- * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
- */
-void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *))
-{
-	for (int i = 1; i <= n - 1; i++) {
-		int swapped = 0;
-
-		for (int j = 0; j <= n - 1 - i; j++) {
-			if (comp_f(&V[j], &V[j + 1]) > 0) {
-				swap(&V[j], &V[j + 1]);
-				swapped = 1;
-			}
-		}
-
-		if (swapped == 0) {
-			break;
-		}
-	}
+static int lomuto_partition(Player V[], int low, int high, int pivot_type, int (*comp_f)(Player *, Player *)) {
+    int p_idx = select_pivot_index(V, low, high, pivot_type, comp_f);
+    Player pivot = V[high];
+    
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (comp_f(&V[j], &pivot) <= 0) {
+            i++;
+            swap_player(&V[i], &V[j]);
+        }
+    }
+    swap_player(&V[i + 1], &V[high]);
+    return i + 1;
 }
 \end{lstlisting}

@@ -13,9 +13,7 @@
 %----------------------------------------------------------
 % TITLE
 %----------------------------------------------------------
-
-%\journalname{Example Template}
-\title{Análisis de la complejidad temporal de algoritmos de Divide y Vencerás: Ordenamiento, búsqueda recursiva y selección}
+\title{Análisis Teórico y Experimental de Algoritmos de Divide y Vencerás: Ordenamiento, Búsqueda y Selección}
 
 %----------------------------------------------------------
 % AUTHORS AND AFFILIATIONS
@@ -24,28 +22,18 @@
 \author[$\dagger$]{Emmanuel Velásquez}
 \author[$\dagger$]{Diego Oyarzo}
 
-%----------------------------------------------------------
-
-%\affil[1]{Affiliation of author one}
-%\affil[2]{Affiliation of author two}
-%\affil[3]{Affiliation of author three}
 \affil[$\dagger$]{Universidad de Magallanes}
 
 %----------------------------------------------------------
 % DATES
 %----------------------------------------------------------
-
 \dates{Este informe fue compilado el \today}
 
 %----------------------------------------------------------
 % FOOTER INFORMATION
 %----------------------------------------------------------
-
-%\leadauthor{Author last name et al.}
-%\footinfo{Creative Commons CC BY 4.0}
-\smalltitle{Diseño de Algoritmos}
-%\institution{College name}
-\theday{\today} %\today
+\smalltitle{Diseño de Algoritmos - Proyecto 2}
+\theday{\today} 
 
 %----------------------------------------------------------
 % COLORS
@@ -59,16 +47,13 @@
 %----------------------------------------------------------
 % Textttt Style
 %----------------------------------------------------------
-% Caja en línea con fondo gris y esquinas redondeadas
 \newtcbox{\mdcode}{on line, tcbox raise base,
   colback=gray!15, colframe=gray!60, boxrule=0.3pt, arc=2pt,
   left=0.3em, right=0.3em, top=0.2ex, bottom=0.2ex, boxsep=0pt,
   before upper=\ttfamily
 }
-% Redefinir \texttt para que use ese estilo            
 \let\oldtexttt\texttt                                  
 \renewcommand{\texttt}[1]{\mdcode{#1}}
-
 
 %----------------------------------------------------------
 % CODE BLOCKS
@@ -104,10 +89,8 @@
 %----------------------------------------------------------
 \usepackage{algorithm}
 \usepackage[noEnd=true,indLines=true]{algpseudocodex}
-%\newcommand{\And}{\textbf{and~}}
 \newcommand{\Or}{\textbf{or~}}
 \newcommand{\Xor}{\textbf{xor~}}
-%\newcommand{\Not}{\textbf{not~}}
 \newcommand{\To}{\textbf{to~}}
 \newcommand{\DownTo}{\textbf{downto~}}
 \newcommand{\True}{\textbf{true~}}
@@ -116,47 +99,26 @@
 \renewcommand{\Output}{\item[\textbf{Output:}]}
 \newcommand{\Print}{\State \textbf{print~}}
 \renewcommand{\Return}{\State \textbf{return~}}
-% Para el Downto
 \algnewcommand\algorithmicdownto{\textbf{downto~}}
 \algnewcommand\Downto{\algorithmicdownto}
 \usepackage{amsmath}
 
-
-%----------------------------------------------------------
-% ARTICLE INFORMATION
-%----------------------------------------------------------
-
-%\corres{Provide the corresponding author information and publisher here.}
-%\email{example@organization.com.}
-%\doi{\url{https://www.doi.org/exampledoi/XXXXXXXXXX}}
-
-%\received{March 20, 2024}
-%\revised{April 16, 2024}
-%\accepted{April 20, 2024}
-%\published{May 21, 2024}
-
-%\license{Rho LaTeX Class \ccLogo\ This document is licensed under Creative Commons CC BY 4.0.}
-
 %----------------------------------------------------------
 % ABSTRACT
 %----------------------------------------------------------
-
 \begin{abstract}
-En este informe se presenta un estudio comparativo de la complejidad temporal de algoritmos recursivos de ordenamiento, búsqueda y selección basados en la estrategia de Divide y Vencerás, aplicados a una base de datos ficticia de deportistas. Se analizan distintas variantes de cada algoritmo (p. ej., diferentes estrategias de selección de pivote en Quick Sort y umbrales de optimización en Merge Sort) evaluando su impacto en el rendimiento. Los experimentos se llevaron a cabo sobre conjuntos de datos de hasta 7000 elementos, con repeticiones múltiples para reducir variabilidad experimental.
+El presente proyecto analiza empírica y teóricamente el comportamiento de algoritmos basados en el paradigma de Divide y Vencerás, aplicándolos sobre un robusto sistema de gestión de deportistas construido nativamente en C. El estudio abarca algoritmos de ordenamiento como Merge Sort (en su vertiente clásica y optimizada mediante Insertion Sort) y Quick Sort utilizando el esquema particional de Lomuto con 4 heurísticas de pivote. Asimismo, se incorporan esquemas de Búsqueda Binaria (recursiva y delimitación de rangos), Búsqueda Exponencial y Búsqueda por Interpolación; cerrando el abanico con Quick Select para la búsqueda del k-ésimo elemento. 
 
-Los resultados demostraron una correspondencia significativa entre el análisis teórico de complejidad temporal y el comportamiento experimental observado, permitiendo validar las características de rendimiento de cada algoritmo en el mejor, peor y caso promedio.
+Mediante evaluaciones sobre variados tamaños de entrada y arreglos dispares, los resultados arrojan evidencia rigurosa sobre el salto cualitativo en la complejidad temporal asintótica (de $\mathcal{O}(n^2)$ a $\mathcal{O}(n \log n)$) en comparación a técnicas sistemáticas previas y explora en profundidad cómo la selección paramétrica del pivote o los umbrales de combinación moldean determinantemente el rendimiento final en escenarios prácticos.
 \end{abstract}
 
-\keywords{Divide y Vencerás, Algoritmos recursivos, Complejidad temporal, Ordenamiento, Búsqueda, Selección, Análisis experimental.}
+\keywords{Divide y Vencerás, Merge Sort, Quick Sort, Búsqueda Exponencial, Quick Select, Complejidad Temporal, Lenguaje C, Lomuto}
 
 %----------------------------------------------------------
 \begin{document}
 \maketitle
 \thispagestyle{firststyle}
 \tableofcontents
-%\linenumbers
-%----------------------------------------------------------
-
 
 \newpage
 \input{src/sections/introduccion.tex}
