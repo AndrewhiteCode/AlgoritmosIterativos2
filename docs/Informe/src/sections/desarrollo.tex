@@ -156,30 +156,93 @@ Dado que se purga un lado de los datos de forma continua y nunca se ordena el 10
 
 
 \subsection{Resultados Experimentales}\label{sec:resultados_experimentales}
-Esta sección contrasta los hallazgos teóricos de la complejidad con simulaciones obtenidas de los datasets estructurados.
+Esta sección contrasta los hallazgos teóricos con simulaciones obtenidas en los datasets estructurados. El proceso se ejecuto con el \textit{smoke} del binario en modo no interactivo, generando tres conjuntos de datos (ordenado, invertido y aleatorio) de $N=25000$, ejecutando todas las ejecuciones en cadena y luego graficando con Python. Para rigor de una operación sin fallos de computo se decidió este sistema, realizandose secuencialmente las ejecuciones en un único hilo del procesador. La ejecucion completa tomo aproximadamente entre 40 minutos y 1 hora.
+
+El estilo de ejecucion usado en \texttt{smoke.c} fue estrictamente secuencial, encadenando cada experimento y su escritura a CSV antes de iniciar el siguiente. Esta causalidad reduce solapamientos temporales y evita el agotamiento de recursos por concurrencia, garantizando estabilidad y trazabilidad en los resultados.
+
+El entorno de ejecucion se resume a continuacion; la configuracion de hardware y sistema operativo se detalla en el registro tecnico adjunto:
+
+\begin{enumerate}
+    \item Sistema operativo: \texttt{Linux Mint 22.2 (zara)}
+    \item Kernel: \texttt{6.17.0-23-generic}
+    \item Arquitectura: \texttt{x86\_64}
+    \item CPU: \texttt{AMD Ryzen 5 7235HS (4 nucleos / 8 hilos, 1 socket)}
+    \item Cache L3: \texttt{8 MiB}
+\end{enumerate}
+
+Las graficas se presentan en escala lineal; en varios casos las curvas se superponen porque los tiempos reales estan en el orden de microsegundos y el redondeo a $10^{-6}$ s hace que series distintas colapsen visualmente. Esta condicion se verifica en los CSV almacenados en el repositorio.
+
+\subsubsection{Ordenamiento: Mejor, Peor y Promedio}\label{sec:exp_ordenamiento}
+\vspace{0.3cm}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/ordenamiento_mejor_experiment_graph.png}
+    \caption{Ordenamiento: mejor caso (arreglo ya ordenado).}
+    \label{fig:ordenamiento_mejor}
+\end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../results/sorting_graph.png}
-    \caption{Comparativa logarítmica de algoritmos de ordenamiento (Divide y Vencerás vs Algoritmos de orden $\mathcal{O}(n^2)$).}
-    \label{fig:sorting_graph}
+    \includegraphics[width=\textwidth]{../results/ordenamiento_peor_experiment_graph.png}
+    \caption{Ordenamiento: peor caso (arreglo invertido).}
+    \label{fig:ordenamiento_peor}
 \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/ordenamiento_promedio_experiment_graph.png}
+    \caption{Ordenamiento: caso promedio (arreglo aleatorio).}
+    \label{fig:ordenamiento_promedio}
+\end{figure}
+
+En los tres escenarios, Quick Sort con pivote aleatorio o mediana se mantiene en el rango bajo de tiempos, mientras que el pivote del ultimo elemento degrada notoriamente en mejor y peor caso (series ya ordenadas o invertidas), exhibiendo el comportamiento esperado de $\mathcal{O}(n^2)$. Merge Sort optimizado con umbral 16 sostiene tiempos estables y bajos; el Merge Sort clasico y los algoritmos cuadraticos se acercan a $0.000000$ s por efecto del redondeo y la escala, pero sus tendencias se distinguen en el CSV.
 
 \subsubsection{Impacto del Umbral en Merge Sort}\label{sec:exp_merge_sort_umbral}
 \vspace{0.3cm}
-Basado en los resultados experimentales plasmados en la gráfica de rendimiento (escala logarítmica), se observa claramente el impacto positivo de la optimización del umbral en el algoritmo Merge Sort. La variante clásica (Merge Sort Classic) muestra tiempos de ejecución consistentemente mayores en comparación con las versiones híbridas (Merge Sort Opt(10) y Opt(50)). Al delegar el ordenamiento de subarreglos pequeños a Insertion Sort, se evitan las penalizaciones por el exceso de llamadas recursivas. Particularmente, la variante con un umbral de 10 y 50 elementos demuestra una mejora medible, ubicándose de manera estable por debajo de la curva del método clásico a medida que $N$ aumenta, evidenciando mayor eficiencia de CPU en arreglos particionados pequeños.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/threshold_experiment_graph.png}
+    \caption{Comparativa de umbrales para Merge Sort optimizado.}
+    \label{fig:threshold_experiment}
+\end{figure}
 
-\subsubsection{Comparativa de Pivotes en Quick Sort}\label{sec:exp_quick_sort_pivotes}
-\vspace{0.3cm}
-El análisis de las curvas de rendimiento revela que las diferentes estrategias de selección de pivote en Quick Sort logran estabilizar el rendimiento del algoritmo hacia su mejor y caso promedio teórico de $\mathcal{O}(n \log n)$. Las variantes de pivote último, aleatorio y mediana de tres presentan un comportamiento empírico altamente competitivo, agrupándose intrínsecamente en la zona de menor tiempo de ejecución de la gráfica. Las estrategias estocásticas y analíticas, como la mediana de tres y la aleatorización respectivamente, son supremamente eficaces previniendo el decaimiento asintótico ocasionado ante series pre-ordenadas (peor caso $\mathcal{O}(n^2)$), manteniendo sus tiempos consistentemente en el clúster inferior global de rendimiento.
+La curva muestra que los umbrales intermedios (T(16) y T(32)) presentan el mejor equilibrio en todo el rango de $N$, evitando el costo de recursion excesiva (T(2)) y el sobrecosto de ordenar subarreglos grandes con Insertion Sort (T(128)). Esto justifica el uso del threshold 16 en las demas pruebas de ordenamiento.
 
 \subsubsection{Desempeño en Algoritmos de Búsqueda}\label{sec:exp_busquedas}
 \vspace{0.3cm}
-Experimentalmente, los algoritmos de búsqueda basados en \textit{Divide y Vencerás} logran una reducción fenomenal en el número de operaciones frente a búsquedas lineales o exhaustivas. Búsqueda Binaria y Exponencial establecen tiempos de operación notablemente bajos garantizando topes y retornos para casos promedio y peores en el orden de $\mathcal{O}(\log n)$. De igual modo se connota que Búsqueda por Interpolación posee la capacidad condicional de eclipsar el desempeño iterativo en arreglos con distribuciones equitativas hasta $\mathcal{O}(\log(\log n))$, sin eximirse del impacto negativo ante topologías dispersas donde puede caer abruptamente a $\mathcal{O}(n)$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/busqueda_promedio_experiment_graph.png}
+    \caption{Búsqueda: caso promedio.}
+    \label{fig:busqueda_promedio}
+\end{figure}
 
-\subsubsection{Contraste: Divide y Vencerás frente a Incrementales (Tarea 1)}\label{sec:exp_vs_t1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/busqueda_peor_experiment_graph.png}
+    \caption{Búsqueda: peor caso.}
+    \label{fig:busqueda_peor}
+\end{figure}
+
+En ambos casos los tiempos quedan en el orden de $10^{-6}$ s y se solapan en la grafica. El CSV confirma que todas las variantes se mantienen en valores similares para $N \le 25000$, lo cual es consistente con complejidades $\mathcal{O}(\log n)$ y un costo constante dominante a este tamano.
+
+\subsubsection{Selección con Quick Select}\label{sec:exp_quick_select}
 \vspace{0.3cm}
-Para visualizar apropiadamente las variaciones temporales masivas que separan a las metodologías se ha recurrido a una gráfica logarítmica de ejecuciones (\texttt{sorting\_graph.png}). En ella se marca una dramática brecha temporal entre los algoritmos preexistentes (Tarea 1), que mantienen una trayectoria ascendente bajo el paradigma cuadrático $\mathcal{O}(n^2)$ dictaminado por los bucles anidados constantes (Swap Sort, Selection Sort, Insertion y Cocktail). Como completa antinomia, las soluciones divisivas implementadas (Quick Sort y Merge Sort $\mathcal{O}(n \log n)$) completan permutaciones masivas en fracciones ínfimas de tiempo transaccional linealizado transversalmente, concluyendo innegablemente la superioridad escalar de las estructuras de ramificación recursivas frente al incremento computacional simple.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/seleccion_mejor_experiment_graph.png}
+    \caption{Quick Select: mejor caso (pivote aleatorio en arreglo aleatorio).}
+    \label{fig:seleccion_mejor}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../results/seleccion_peor_experiment_graph.png}
+    \caption{Quick Select: peor caso (pivote ultimo en arreglo ordenado).}
+    \label{fig:seleccion_peor}
+\end{figure}
+
+Se observa crecimiento aproximadamente lineal en ambos casos, con un peor caso que aumenta mas rapido pero mantiene el rango microsegundo para $N \le 25000$, coherente con el costo promedio lineal y el peor caso cuadratico amortiguado por el tamano de entrada y el costo constante de la plataforma.
 
 
 \subsection{Aplicación Práctica y Funcionalidades}\label{sec:aplicacion_practica}
