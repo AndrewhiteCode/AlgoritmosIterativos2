@@ -15,7 +15,7 @@ void run_smoke_tests() {
 
     /* Todos los algoritmos activos por defecto, incluyendo los de Tarea 1 */
     current_active_flags = FLAG_ALL_SORTS;
-
+    
     printf("1) Generando conjuntos de datos (Sorted, Inverted, Shuffled 50000 n)...\n");
     generate_csv(50000, 1); rename("build/db/players.csv", "build/db/players_sorted.csv");
     generate_csv(50000, 2); rename("build/db/players.csv", "build/db/players_inverted.csv");

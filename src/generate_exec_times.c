@@ -358,7 +358,7 @@ void run_select_experiment(const char* target_file, const char* out_filename, in
         int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
         double tSel = 0;
 
-        int k_target = is_worst_case ? k - 1 : k / 2;
+        int k_target = is_worst_case ? 0 : k / 2;
         int pivot_t  = is_worst_case ? 1 : 3;   /* peor: last, mejor: random */
 
         for (int i = 0; i < NUM_TRIALS; i++) {
