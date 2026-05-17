@@ -1,0 +1,265 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% --- Configuración de Idioma, Codificación e Imágenes ---
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{graphicx} % Para la carga de gráficos
+
+% --- Tipografía "Tech Performance" ---
+\usefonttheme{serif} % Títulos en Serif (Ingeniería Académica)
+\usepackage{inconsolata} % Fuente Monospace para subtítulos y código
+
+% --- Configuración de Colores (Modo Oscuro / Terminal) ---
+\definecolor{TechBg}{HTML}{0D1117}       % Fondo Negro Profundo (Estilo IDE)
+\definecolor{TechRed}{HTML}{FF3333}      % Rojo Código / Acento
+\definecolor{TechWhite}{HTML}{F8F9FA}    % Texto Principal
+\definecolor{TechGray}{HTML}{8B949E}     % Texto Secundario/Comentarios
+
+% Aplicación de colores globales
+\setbeamercolor{background canvas}{bg=TechBg}
+\setbeamercolor{normal text}{fg=TechWhite}
+\setbeamercolor{structure}{fg=TechRed}
+\setbeamercolor{title}{fg=TechWhite}
+\setbeamercolor{subtitle}{fg=TechGray}
+\setbeamercolor{author}{fg=TechWhite}
+\setbeamercolor{date}{fg=TechGray}
+
+% --- Estilo de Elementos y Listas ---
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{item}{fg=TechRed}
+\setbeamertemplate{itemize item}{\small$\blacksquare$}
+\setbeamertemplate{itemize subitem}{\scriptsize$\rightarrow$}
+
+% --- Plantilla de Títulos de Diapositiva ---
+\setbeamertemplate{frametitle}{
+    \vspace{0.4cm}
+    \begin{minipage}{\textwidth}
+        {\usebeamerfont{frametitle}\bfseries\insertframetitle}
+        \vskip2pt
+        \tikz\draw[TechRed, thick] (0,0) -- (\textwidth,0);
+    \end{minipage}
+}
+
+% --- Datos de la Presentación ---
+\title{\Huge Divide y Vencerás}
+\subtitle{\texttt{[Análisis Experimental] Ordenamiento, Búsqueda y Selección}}
+\author{A. Barbosa \and E. Velásquez \and D. Oyarzo}
+\date{\texttt{Mayo 2026 // C\_CORE\_PERFORMANCE}}
+
+\begin{document}
+
+% --- DIAPOSITIVA DE PORTADA ---
+\begin{frame}[plain]
+    \vspace{1.5cm}
+    \begin{columns}
+        \begin{column}{0.65\textwidth}
+            {\usebeamercolor[fg]{title}\usebeamerfont{title}\inserttitle}\vspace{0.2cm}
+            
+            {\usebeamercolor[fg]{subtitle}\fontfamily{zi4}\selectfont\insertsubtitle}\vspace{1cm}
+            
+            \tikz\fill[TechRed] (0,0) rectangle (2cm, 0.1cm);
+            \vspace{0.5cm}
+            
+            {\small \textbf{Investigadores:} \insertauthor}
+        \end{column}
+        
+        \begin{column}{0.3\textwidth}
+            \flushright
+            \small
+            \color{TechGray}
+            \texttt{SYS: GESTIÓN\_DEPORTISTAS}\\
+            \texttt{LANG: C NATIVO}\\
+            \texttt{\insertdate}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Objetivo del Proyecto}
+\begin{itemize}
+\item Analizar empírica y teóricamente los algoritmos basados en \textbf{Divide y Vencerás}.
+\item Aplicar los modelos sobre un sistema robusto y nativo de gestión en lenguaje \texttt{C}.
+\item Validar el impacto de las heurísticas a través de tres áreas core:
+\begin{itemize}
+\item \texttt{ORDENAMIENTO} $\rightarrow$ Merge Sort (Clásico/Threshold), Quick Sort (Lomuto).
+\item \texttt{BÚSQUEDA} $\rightarrow$ Binaria, Exponencial, Interpolación.
+\item \texttt{SELECCIÓN} $\rightarrow$ Quick Select (búsqueda del $k$-ésimo elemento).
+\end{itemize}
+\end{itemize}
+
+\vspace{0.6cm}
+\textbf{\color{TechRed}\texttt{>>}} \textbf{Meta Asintótica:} Evidenciar rigurosamente el salto temporal de $\mathcal{O}(n^2)$ a $\mathcal{O}(n \log n)$.
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Algoritmos de Ordenamiento: Base Teórica}
+\begin{columns}[t]
+    \begin{column}{0.48\textwidth}
+        \textbf{\color{TechRed} \texttt{01\_}} \textbf{Merge Sort}
+        \vskip5pt
+        {\footnotesize 
+        \textbf{Clásico:} División recursiva sistemática hasta $n=1$. Garantiza $\mathcal{O}(n \log n)$ en todos los escenarios, a costo de uso extra de memoria $O(n)$.\\[1ex]
+        \textbf{Optimizado:} Delega subarreglos pequeños a un \texttt{Insertion Sort} controlando el límite mediante un \textit{threshold}. Disminuye radicalmente el \textit{overhead} del stack recursivo.
+        }
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \textbf{\color{TechRed} \texttt{02\_}} \textbf{Quick Sort}
+        \vskip5pt
+        {\footnotesize 
+        \textbf{Mecánica:} Basado puramente en el esquema de partición de Lomuto.\\[1ex]
+        \textbf{Impacto del Pivote:} Se analizaron múltiples heurísticas (Aleatorio, Mediana, etc.) para evitar el peor caso $\mathcal{O}(n^2)$ que ocurre al procesar arreglos previamente ordenados.
+        }
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Merge Sort: Clásico vs Optimizado}
+\begin{columns}
+    \begin{column}{0.48\textwidth}
+        \centering
+        % Reemplazar "figura1.png" por el nombre exacto de tu imagen compilada
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura1.png}\\
+        {\scriptsize \textbf{Figura 1:} Merge Sort (Todos los casos)}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \centering
+        % Reemplazar "figura5.png" por el nombre exacto de tu imagen compilada
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura5.png}\\
+        {\scriptsize \textbf{Figura 5:} Merge Sort Optimizado}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Optimización de Umbral (\textit{Threshold}) en Merge Sort}
+\begin{columns}
+    \begin{column}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figura3.png}\\
+        {\scriptsize \textbf{Fig 3:} Mejor caso}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figura2.png}\\
+        {\scriptsize \textbf{Fig 2:} Caso Promedio}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figura4.png}\\
+        {\scriptsize \textbf{Fig 4:} Peor caso}
+    \end{column}
+\end{columns}
+
+\vspace{0.4cm}
+\centering{\footnotesize\textbf{\texttt{[ANALÍTICA]}} La selección paramétrica del tamaño de combinación (threshold) moldea determinantemente el uso eficiente de CPU en conjuntos de datos pequeños.}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Quick Sort: Comparación y Degradación}
+\begin{columns}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura7.png}\\
+        {\scriptsize \textbf{Figura 7:} Quick Sort (Caso Promedio)}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura6.png}\\
+        {\scriptsize \textbf{Figura 6:} Quick Sort (Peor Caso)}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Benchmarking Global de Ordenamiento}
+\begin{columns}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura9.png}\\
+        {\scriptsize \textbf{Figura 9:} Comparativa (Caso Promedio)}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura10.png}\\
+        {\scriptsize \textbf{Figura 10:} Comparativa (Peor Caso)}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Algoritmos de Búsqueda y Selección}
+\begin{itemize}
+\item \textbf{Búsqueda Binaria:} Salto de $\mathcal{O}(n)$ a $\mathcal{O}(\log n)$. Evaluada mediante recursión nativa y técnica de delimitación de rangos directos.
+\item \textbf{Búsqueda Exponencial:} Expansión del rango de búsqueda mediante potencias de $2^i$, finalizando en una búsqueda binaria local.
+\item \textbf{Búsqueda por Interpolación:} Estimación directa de la posición evaluando valores de los extremos. Óptima en distribuciones uniformes ($\mathcal{O}(\log \log n)$).
+\end{itemize}
+
+\vspace{0.4cm}
+\textbf{\color{TechRed}Extracción de Datos:}
+\begin{itemize}
+\item \textbf{Quick Select:} Recuperación del $k$-ésimo elemento de un conjunto desordenado descartando recursivamente la mitad inútil. $\mathcal{O}(n)$ en el caso promedio.
+\end{itemize}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Rendimiento en Algoritmos de Búsqueda}
+\begin{columns}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura11.png}\\
+        {\scriptsize \textbf{Figura 11:} Búsqueda (Caso Promedio)}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{figura12.png}\\
+        {\scriptsize \textbf{Figura 12:} Búsqueda (Peor Caso)}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Comportamiento de Quick Select}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{figura13.png}\\
+        {\scriptsize \textbf{Figura 13:} Rendimiento en Extracción (Mejor y Peor Caso)}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \textbf{\color{TechRed}Análisis Operativo:}
+        \begin{itemize}
+        \item Se comporta idéntico a Quick Sort, pero al desechar particiones logra una complejidad lineal $\mathcal{O}(n)$.
+        \item Ideal en escenarios de métricas deportivas donde es necesario extraer ránkings (el $top-k$) sin ordenar todo el set masivo de datos.
+        \end{itemize}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%----------------------------------------
+\begin{frame}{Conclusión}
+\centering
+\begin{tikzpicture}[node distance=2.5cm, auto]
+    \tikzstyle{block} = [rectangle, draw=TechRed, fill=TechBg, text=TechWhite, width=2.8cm, text centered, minimum height=1cm, ultra thick]
+    \tikzstyle{line} = [draw, -latex, TechWhite, thick]
+    
+    \node [block] (teoria) {\footnotesize \textbf{Base Teórica}};
+    \node [block, right of=teoria, xshift=1.5cm] (impl) {\footnotesize \textbf{Optimización C}};
+    \node [block, right of=impl, xshift=1.5cm] (bench) {\footnotesize \textbf{Benchmarking}};
+    
+    \path [line] (teoria) -- (impl);
+    \path [line] (impl) -- (bench);
+\end{tikzpicture}
+
+\vspace{0.8cm}
+\begin{itemize}
+\item La gestión directa de memoria (\texttt{C nativo}) revela el peso real del \textit{overhead} recursivo que la cota asintótica grande $\mathcal{O}$ normalmente ignora.
+\item El paradigma \textbf{Divide y Vencerás} requiere afinación manual (como el esquema híbrido Merge/Insertion o la heurística del pivote) para no colapsar el rendimiento en entornos de producción.
+\end{itemize}
+
+\vspace{0.6cm}
+\centering{\footnotesize\color{TechGray}\texttt{[FIN DEL ANÁLISIS // MEMORY\_FREED]}}
+\end{frame}
+
+\end{document}
